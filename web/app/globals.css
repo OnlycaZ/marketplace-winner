@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/* Map design tokens (lib/tokens.ts, injected as --t-* in the layout) to Tailwind
+   utilities. Tailwind's default palette, radii and shadows are switched off so
+   components can only use tokens. */
+@theme inline {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --ease-*: initial;
+
+  --color-bg: var(--t-color-bg);
+  --color-surface: var(--t-color-surface);
+  --color-ink: var(--t-color-ink);
+  --color-ink-2: var(--t-color-ink2);
+  --color-line: var(--t-color-line);
+  --color-field: var(--t-color-field);
+  --color-primary: var(--t-color-primary);
+  --color-primary-hover: var(--t-color-primary-hover);
+  --color-error: var(--t-color-error);
+  --color-on-primary: var(--t-color-on-primary);
+  --color-paper-terracotta: var(--t-paper-terracotta);
+  --color-paper-sage: var(--t-paper-sage);
+  --color-paper-butter: var(--t-paper-butter);
+  --color-paper-paleblue: var(--t-paper-paleblue);
+  --color-paper-powder: var(--t-paper-powder);
+  --color-paper-charcoal: var(--t-paper-charcoal);
+  --color-transparent: transparent;
+
+  --font-display: var(--font-archivo);
+  --font-sans: var(--font-figtree);
+
+  --text-display: var(--t-text-display);
+  --text-h2: var(--t-text-h2);
+  --text-h3: var(--t-text-h3);
+  --text-lead: var(--t-text-lead);
+  --text-body: var(--t-text-body);
+  --text-small: var(--t-text-small);
+
+  --leading-display: var(--t-leading-display);
+  --leading-heading: var(--t-leading-heading);
+  --leading-body: var(--t-leading-body);
+  --tracking-display: var(--t-tracking-display);
+  --tracking-heading: var(--t-tracking-heading);
+  --tracking-tight: var(--t-tracking-tight);
+
+  --spacing: var(--t-spacing);
+
+  --radius-sm: var(--t-radius-sm);
+  --radius-md: var(--t-radius-md);
+  --radius-lg: var(--t-radius-lg);
+  --radius-pill: var(--t-radius-pill);
+
+  --shadow-card: var(--t-shadow-card);
+  --shadow-float: var(--t-shadow-float);
+  --shadow-press: var(--t-shadow-press);
+
+  --ease-out: var(--t-ease-out);
+  --ease-in-out: var(--t-ease-in-out);
+  --ease-standard: var(--t-ease-standard);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--spacing) * 24);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Browser surfaces in the palette: selection on butter paper, a blue caret. */
+::selection {
+  background: var(--color-paper-butter);
+  color: var(--color-ink);
+}
+
+input {
+  caret-color: var(--color-primary);
+}
+
+/* Visible focus everywhere: a blue ring with a small gap (white inside the dark menu). */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .font-display-tight {
+    font-family: var(--font-display);
+    font-stretch: var(--t-width-display);
+    font-weight: 820;
+  }
+
+  /* Page-load sequence: one orchestrated moment (docs/motion-plan.md #1). */
+  .enter {
+    animation: enter var(--t-dur-enter) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--t-dur-stagger));
+  }
+
+  /* Form messages: short rise so the change is noticed (docs/motion-plan.md #9). */
+  .pop-in {
+    animation: enter 200ms var(--ease-out) both;
+  }
+
+  /* The studio paper unrolls down from its roll, once, after the headline. */
+  .unroll {
+    animation: unroll var(--t-dur-unroll) var(--ease-in-out) 300ms both;
+  }
+}
+
+@keyframes unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .enter,
+  .unroll,
+  .pop-in {
+    animation: fade 200ms linear both;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

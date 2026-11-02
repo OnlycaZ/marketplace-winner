@@ -1,0 +1,53 @@
+/* Proposed design tokens (Phase 1b draft).
+   In the Next.js project these move to one tokens file shared by CSS and Motion. */
+:root {
+  /* colour: base */
+  --color-bg: #ffffff;
+  --color-surface: #f3f6fb;
+  --color-ink: #0e1a2e;
+  --color-ink-2: #46526b;
+  --color-line: #d8dfea;
+  --color-field: #7d89a1;
+  --color-primary: #1f44c8;
+  --color-primary-hover: #1734a0;
+  --color-error: #b3261e;
+
+  /* colour: studio papers */
+  --paper-terracotta: #b9563f;
+  --paper-sage: #a9b89b;
+  --paper-butter: #f1db98;
+  --paper-paleblue: #bcd2e8;
+  --paper-powder: #ebc6c2;
+  --paper-charcoal: #34363b;
+
+  /* type scale (fluid between 375px and 1440px) */
+  --text-display: clamp(3.25rem, 2.1rem + 4.9vw, 7.5rem);
+  --text-h2: clamp(2.25rem, 1.7rem + 2.4vw, 4rem);
+  --text-h3: clamp(1.375rem, 1.25rem + 0.5vw, 1.75rem);
+  --text-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.875rem;
+  --leading-display: 0.92;
+  --leading-heading: 1.05;
+  --leading-body: 1.55;
+  --tracking-display: -0.045em;
+  --tracking-heading: -0.03em;
+
+  /* spacing (4px base) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --space-9: 96px; --space-10: 128px; --space-11: 160px;
+
+  /* radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  /* shadows, tinted with ink rather than grey */
+  --shadow-card: 0 1px 2px rgb(14 26 46 / 0.05), 0 10px 30px -12px rgb(14 26 46 / 0.16);
+  --shadow-float: 0 12px 36px -8px rgb(14 26 46 / 0.35);
+  --shadow-press: 0 1px 2px rgb(14 26 46 / 0.2);
+
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-primary);
+}

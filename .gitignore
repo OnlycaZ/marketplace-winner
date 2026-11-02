@@ -1,0 +1,20 @@
+# dependencies and builds (the Next.js app has its own web/.gitignore too)
+node_modules/
+.next/
+.vercel/
+
+# secrets: only .env.example is committed
+.env*
+!.env.example
+
+# real test photos never go on git
+experiments/*/input/
+
+# local Claude Code settings and impeccable run data
+.claude/settings.local.json
+.impeccable/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
