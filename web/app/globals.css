@@ -54,6 +54,7 @@
   --shadow-card: var(--t-shadow-card);
   --shadow-float: var(--t-shadow-float);
   --shadow-press: var(--t-shadow-press);
+  --shadow-clay: var(--t-shadow-clay);
 
   --ease-out: var(--t-ease-out);
   --ease-in-out: var(--t-ease-in-out);
@@ -112,6 +113,221 @@ input {
   .unroll {
     animation: unroll var(--t-dur-unroll) var(--ease-in-out) 300ms both;
   }
+
+  /* Hero demo (docs/motion-plan.md). Everything shares one 8s timeline, so one
+     data attribute pauses it all and the steps can't drift apart. */
+  .demo {
+    --card-x: 30%;
+  }
+  .demo-after,
+  .demo-bar,
+  .demo-spark,
+  .demo-card,
+  .demo-badge {
+    animation-duration: var(--t-dur-demo-loop);
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+  .demo-after {
+    animation-name: demo-after;
+  }
+  .demo-bar {
+    animation-name: demo-bar;
+    filter: blur(2px);
+    mix-blend-mode: screen;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--t-color-bg) 70%, transparent) 45%,
+      var(--t-color-bg) 50%,
+      color-mix(in srgb, var(--t-color-bg) 70%, transparent) 55%,
+      transparent
+    );
+  }
+  .demo-spark {
+    animation-name: demo-spark;
+    background: var(--t-color-bg);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  }
+  .demo-card {
+    animation-name: demo-card;
+  }
+  .demo-badge {
+    animation-name: demo-badge;
+  }
+  .float {
+    animation: float var(--t-dur-float) var(--ease-in-out) infinite alternate;
+  }
+  .sway {
+    transform-origin: 50% 0;
+    animation: sway var(--t-dur-float) var(--ease-in-out) infinite alternate;
+  }
+  .demo[data-running="false"] :is(.demo-after, .demo-bar, .demo-spark, .demo-card, .demo-badge, .float, .sway) {
+    animation-play-state: paused;
+  }
+
+  /* Mascot: a small swing from its hook. */
+  .swing-once {
+    transform-origin: 50% 8%;
+    animation: swing var(--t-dur-swing) var(--ease-in-out);
+  }
+
+  /* Mascot reacting to the form: a hop when it works, a shake when it doesn't. */
+  .mascot-happy {
+    animation: hop 560ms var(--ease-out);
+  }
+  .mascot-sad {
+    animation: shake 420ms var(--ease-in-out);
+  }
+}
+
+@media (min-width: 640px) {
+  .demo {
+    --card-x: 32%;
+  }
+}
+
+@keyframes demo-after {
+  0%,
+  16% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 1;
+    animation-timing-function: var(--ease-in-out);
+  }
+  30%,
+  92% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 0;
+  }
+}
+
+@keyframes demo-bar {
+  0%,
+  16% {
+    opacity: 0;
+    transform: translateX(-120%);
+    animation-timing-function: var(--ease-in-out);
+  }
+  18%,
+  28% {
+    opacity: 1;
+  }
+  30%,
+  100% {
+    opacity: 0;
+    transform: translateX(620%);
+  }
+}
+
+@keyframes demo-spark {
+  0%,
+  17% {
+    opacity: 0;
+    transform: translateX(0) scale(0.2);
+  }
+  21%,
+  27% {
+    opacity: 1;
+  }
+  31%,
+  100% {
+    opacity: 0;
+    transform: translateX(100cqw) scale(1) rotate(180deg);
+  }
+}
+
+@keyframes demo-card {
+  0%,
+  34% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+    animation-timing-function: var(--ease-out);
+  }
+  40% {
+    opacity: 1;
+    transform: translateX(calc(-50% + var(--card-x) * 2.6)) translateY(-14px) scale(1.06) rotate(8deg);
+  }
+  44%,
+  92% {
+    opacity: 1;
+    transform: translateX(calc(-50% + var(--card-x) * 2.4)) scale(1) rotate(6deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--card-x) * 2.4)) translateY(10px) scale(0.9) rotate(6deg);
+  }
+}
+
+@keyframes demo-badge {
+  0%,
+  44% {
+    transform: scale(0);
+    animation-timing-function: var(--ease-out);
+  }
+  48% {
+    transform: scale(1.25);
+  }
+  51%,
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes hop {
+  35% {
+    transform: translateY(-16px) rotate(-5deg);
+  }
+  65% {
+    transform: translateY(2px) rotate(3deg);
+  }
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-6px) rotate(-4deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(3deg);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(14deg);
+  }
+  60% {
+    transform: rotate(-9deg);
+  }
+  85% {
+    transform: rotate(4deg);
+  }
 }
 
 @keyframes unroll {
@@ -138,6 +354,25 @@ input {
   .unroll,
   .pop-in {
     animation: fade 200ms linear both;
+  }
+  /* The demo shows its finished state and stays still. */
+  .demo-after,
+  .demo-badge,
+  .float,
+  .sway,
+  .swing-once,
+  .mascot-happy,
+  .mascot-sad {
+    animation: none;
+  }
+  .demo-bar,
+  .demo-spark {
+    animation: none;
+    display: none;
+  }
+  .demo-card {
+    animation: none;
+    transform: translateX(calc(-50% + var(--card-x) * 2.4)) rotate(6deg);
   }
   *,
   *::before,

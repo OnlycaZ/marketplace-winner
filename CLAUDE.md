@@ -38,7 +38,8 @@ rezultat. Dacă o abordare încalcă regula, o semnalezi înainte să scrii cod.
 - Design tokens (culori, fonturi, spațieri, raze, umbre, durate și curbe de
   animație) stau într-un singur fișier, folosibil din CSS și din Motion;
   componentele folosesc doar tokens.
-- Ilustrațiile sunt componente SVG în `components/illustrations/`, cu culori
+- Ilustrațiile sunt imagini 3D în `public/assets/3d/`, afișate prin next/image;
+  ce desenăm în cod (hârtia, rola) stă în `components/illustrations/`, cu culori
   doar din tokens.
 - Publicare pe Vercel.
 - Nu adăuga biblioteci noi fără să explici de ce și fără aprobare.
@@ -75,11 +76,16 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
 - Lumea vizuală proprie: studioul foto. Culorile de hârtie (teracotă, salvie,
   galben-unt, bleu pal, roz pudrat, cărbune) apar în scena din hero, în
   ilustrații, în carduri și în footer, cu un grain foarte discret.
-- Ilustrații originale, desenate ca SVG, într-un singur stil consecvent (aceeași
-  grosime de linie, aceeași paletă). Ele explică ideea (studio, lot, verificare,
-  export). NU se prefac a fi rezultate reale ale produsului: unde trebuie
-  arătată haina sau un înainte/după, folosești poze reale sau locuri goale
-  marcate clar.
+- Ilustrații 3D de tip cartoon (plastilină moale), într-un singur stil, ca
+  imagini WebP transparente în `public/assets/3d/`. Fundalurile din ele sunt
+  hârtie de studio, nu lemn sau decoruri (produsul rămâne hârtie colorată).
+  Hero fără cer și nori (prea aproape de Rewinder). Ele explică ideea (studio,
+  lot, verificare, export). NU se prefac a fi rezultate reale ale produsului:
+  unde trebuie arătată haina reală sau un înainte/după real, folosești poze
+  reale sau locuri goale marcate clar. Într-o animație înainte/după, haina e
+  același fișier în ambele stări, ca să nu-și schimbe niciun pixel.
+- Mascota: umerașul cu ochi, personaj discret (meniu, scenă, formular). Nu
+  vorbește și nu acoperă conținutul.
 - Interzis: gradient-uri violet-albastru, Inter și Space Grotesk, carduri cu
   iconițe generice, emoji, recenzii, cifre sau statistici inventate, logo-uri
   sau nume de platforme, mascote sau ilustrații copiate.
@@ -111,10 +117,10 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
   proiect)
   - `app/`: rute (`/`, `/privacy`); `app/api/waitlist/`: endpoint-ul listei de
     așteptare (demo mode); `icon.svg`, `opengraph-image.tsx`
-  - `components/`: componente refolosibile; `components/illustrations/`: SVG-uri
-    (`cut.tsx` are piesele comune ale stilului „hârtie decupată”)
+  - `components/`: componente refolosibile; `components/illustrations/`: scenele
+    3D (`Print3D.tsx` are poza și insigna, `Tilt.tsx` înclinarea după mouse)
   - `lib/site.ts`: numele produsului (singurul loc); `lib/tokens.ts`: design tokens
-  - `public/assets/`: poze (ex. `hero-garment.png`, haina decupată)
+  - `public/assets/3d/`: imaginile 3D decupate (haine, mascotă, ramă de telefon)
 - `docs/`: `decisions.md` (data, decizia, motivul, alternativa respinsă),
   `motion-plan.md`, `design-brief/` (pagina de test din Faza 1b), `pricing.md`,
   `platform-terms.md`

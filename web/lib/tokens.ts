@@ -52,6 +52,8 @@ export const shadow = {
   card: "0 1px 2px rgb(14 26 46 / 0.05), 0 10px 30px -12px rgb(14 26 46 / 0.16)",
   float: "0 12px 36px -8px rgb(14 26 46 / 0.35)",
   press: "0 1px 2px rgb(14 26 46 / 0.2)",
+  // soft 3D objects: lit from above, shaded underneath, lifted off the surface
+  clay: "inset 0 2px 3px rgb(255 255 255 / 0.55), inset 0 -4px 8px rgb(14 26 46 / 0.1), 0 14px 24px -10px rgb(14 26 46 / 0.35)",
 } as const;
 
 // Motion. Durations in ms, curves as cubic-bezier control points.
@@ -63,7 +65,9 @@ export const duration = {
   enter: 450,
   unroll: 700,
   cycleFade: 900,
-  cycleInterval: 4000,
+  demoLoop: 8000,
+  float: 6000,
+  swing: 700,
   stagger: 60,
 } as const;
 

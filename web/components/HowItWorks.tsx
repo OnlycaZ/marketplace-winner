@@ -31,7 +31,7 @@ export function HowItWorks() {
       <ol className="mt-14 grid gap-12 md:grid-cols-3 md:gap-6">
         {steps.map(({ title, text, Illustration }, i) => (
           <li key={title} className="flex flex-col">
-            <div className="rounded-lg bg-surface px-6 pt-6 pb-2">
+            <div className="overflow-hidden rounded-lg bg-surface p-4">
               <Illustration />
             </div>
             <div className="mt-6 flex items-start gap-4">

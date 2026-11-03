@@ -4,15 +4,18 @@
 // (docs/motion-plan.md #7). Touch screens and reduced motion get the fanned state, static.
 import { motion, useReducedMotion } from "motion/react";
 import { useSyncExternalStore } from "react";
-import { paper, Print } from "./cut";
+import { ease, type PaperId } from "@/lib/tokens";
+import { Print3D, type Garment } from "./Print3D";
 
-const prints = [
-  { backdrop: paper("charcoal"), rest: { x: 0, y: 6, rotate: -4 }, fan: { x: -112, y: 22, rotate: -12 } },
-  { backdrop: paper("terracotta"), rest: { x: 0, y: 4, rotate: -2 }, fan: { x: -56, y: 6, rotate: -6 } },
-  { backdrop: paper("butter"), rest: { x: 0, y: 2, rotate: 1 }, fan: { x: 0, y: 0, rotate: 0 } },
-  { backdrop: paper("sage"), rest: { x: 0, y: 2, rotate: 3 }, fan: { x: 56, y: 6, rotate: 6 } },
-  { backdrop: paper("powder"), rest: { x: 0, y: 0, rotate: 5 }, fan: { x: 112, y: 22, rotate: 12 } },
+const prints: { paper: PaperId; garment: Garment; rest: Pose; fan: Pose }[] = [
+  { paper: "charcoal", garment: "hoodie-blue", rest: { x: "0%", y: 8, rotate: -5 }, fan: { x: "-92%", y: 30, rotate: -14 } },
+  { paper: "terracotta", garment: "jeans", rest: { x: "0%", y: 6, rotate: -2 }, fan: { x: "-46%", y: 8, rotate: -7 } },
+  { paper: "sage", garment: "hoodie-pink", rest: { x: "0%", y: 4, rotate: 1 }, fan: { x: "0%", y: 0, rotate: 0 } },
+  { paper: "paleblue", garment: "jeans", rest: { x: "0%", y: 2, rotate: 3 }, fan: { x: "46%", y: 8, rotate: 7 } },
+  { paper: "powder", garment: "hoodie-blue", rest: { x: "0%", y: 0, rotate: 5 }, fan: { x: "92%", y: 30, rotate: 14 } },
 ];
+
+type Pose = { x: string; y: number; rotate: number };
 
 const hoverQuery = "(hover: hover) and (pointer: fine)";
 const subscribe = (cb: () => void) => {
@@ -27,24 +30,24 @@ export function PhotoStack({ fanned }: { fanned: boolean }) {
   const open = fanned || !canHover || !!reduceMotion;
 
   return (
-    <svg viewBox="0 0 520 300" className="w-full" aria-hidden="true">
+    <div className="relative mx-auto h-[250px] max-w-[520px] sm:h-[320px]" aria-hidden="true">
       {prints.map((p, i) => (
-        <motion.g
+        <motion.div
           key={i}
           initial={false}
           animate={open ? p.fan : p.rest}
+          whileHover={open && !reduceMotion ? { y: p.fan.y - 18, scale: 1.04 } : undefined}
           transition={
             open
-              ? { type: "spring", duration: 0.3, bounce: 0.15 }
-              : { duration: 0.2, ease: [0.23, 1, 0.32, 1] }
+              ? { type: "spring", duration: 0.45, bounce: 0.25 }
+              : { duration: 0.2, ease: ease.out as unknown as [number, number, number, number] }
           }
-          style={{ originX: "50%", originY: "100%" }}
+          style={{ transformOrigin: "50% 120%" }}
+          className="absolute bottom-0 left-[calc(50%-19%)] w-[38%]"
         >
-          <g transform="translate(182 40)">
-            <Print w={156} h={200} backdrop={p.backdrop} />
-          </g>
-        </motion.g>
+          <Print3D paper={p.paper} garment={p.garment} className="aspect-[4/5]" sizes="170px" />
+        </motion.div>
       ))}
-    </svg>
+    </div>
   );
 }

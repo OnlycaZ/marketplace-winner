@@ -1,33 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
-import { duration, papers } from "@/lib/tokens";
-import { SweepFixtures, SweepPaper } from "./illustrations/StudioSweep";
-
-type Props = { garmentSrc: string | null };
+import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import { papers } from "@/lib/tokens";
+import { SweepPaper, SweepRoll } from "./illustrations/StudioSweep";
 
 const START = papers.findIndex((p) => p.id === "paleblue");
+const spring = { stiffness: 120, damping: 18, mass: 0.6 };
+// Sparkles that ride along with the wipe: height in the screen, and start offset.
+const sparks = [
+  { y: "18%", d: "0ms", s: "14px" },
+  { y: "38%", d: "90ms", s: "9px" },
+  { y: "55%", d: "40ms", s: "16px" },
+  { y: "72%", d: "140ms", s: "10px" },
+  { y: "86%", d: "70ms", s: "13px" },
+];
 
-export function StudioScene({ garmentSrc }: Props) {
+// The jeans are one transparent file drawn over both states, so they can't change between them.
+function Jeans({ sizes }: { sizes: string }) {
+  return <Image src="/assets/3d/jeans.webp" alt="" fill sizes={sizes} className="object-cover" />;
+}
+
+export function StudioScene() {
   const [index, setIndex] = useState(START);
-  // null until the visitor presses Play/Pause or picks a colour.
-  const [userPlaying, setUserPlaying] = useState<boolean | null>(null);
-  // "auto" uses the slow crossfade, "pick" the quicker change after a click.
-  const [mode, setMode] = useState<"auto" | "pick">("auto");
+  const [pinned, setPinned] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [inView, setInView] = useState(false);
   const [tabVisible, setTabVisible] = useState(true);
   const reduceMotion = useReducedMotion();
-  const sceneRef = useRef<HTMLDivElement>(null);
-
-  // Reduced motion: the cycle never starts on its own.
-  const playing = userPlaying ?? !reduceMotion;
+  const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = sceneRef.current;
+    const el = stageRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.25 });
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.05 });
     io.observe(el);
     const onVisibility = () => setTabVisible(document.visibilityState === "visible");
     document.addEventListener("visibilitychange", onVisibility);
@@ -37,79 +44,113 @@ export function StudioScene({ garmentSrc }: Props) {
     };
   }, []);
 
-  const cycling = playing && inView && tabVisible;
-  useEffect(() => {
-    if (!cycling) return;
-    const id = window.setInterval(() => {
-      setMode("auto");
-      setIndex((i) => (i + 1) % papers.length);
-    }, duration.cycleInterval);
-    return () => window.clearInterval(id);
-  }, [cycling]);
+  // Cursor position in the stage, -1 to 1, smoothed so objects drift instead of snapping.
+  const mx = useSpring(useMotionValue(0), spring);
+  const my = useSpring(useMotionValue(0), spring);
+  const rotateY = useTransform(mx, [-1, 1], [-11, 11]);
+  const rotateX = useTransform(my, [-1, 1], [8, -8]);
+  const nearX = useTransform(mx, [-1, 1], [-22, 22]);
+  const nearY = useTransform(my, [-1, 1], [-12, 12]);
+  const farX = useTransform(mx, [-1, 1], [10, -10]);
+
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || reduceMotion) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onPointerLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
 
   const paper = papers[index];
-  const onPaper = paper.text === "light" ? "text-bg" : "text-ink";
-
-  const pick = (i: number) => {
-    setMode("pick");
-    setIndex(i);
-    setUserPlaying(false);
-  };
+  const running = !paused && inView && tabVisible;
 
   return (
     <section aria-label="Studio backdrop demo" className="mx-auto mt-14 max-w-[1240px] px-4 sm:mt-16">
       <div
-        ref={sceneRef}
-        className="relative aspect-[4/5] overflow-hidden rounded-lg bg-surface sm:aspect-[16/10] lg:aspect-[16/9]"
+        ref={stageRef}
+        role="img"
+        aria-label="A phone shows a photo of jeans on a grey sheet. Coloured studio paper wipes in behind the jeans, which stay exactly the same, and the finished photo pops out approved."
+        data-running={running}
+        onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
+        className="demo relative aspect-[4/5] overflow-hidden rounded-lg bg-surface sm:aspect-[5/3]"
         style={
           {
             "--paper": paper.hex,
-            "--paper-dur": mode === "auto" ? "var(--t-dur-cycle-fade)" : "var(--t-dur-paper)",
+            "--paper-dur": pinned ? "var(--t-dur-paper)" : "var(--t-dur-cycle-fade)",
           } as React.CSSProperties
         }
       >
         <div className="unroll absolute inset-0">
           <SweepPaper className="h-full w-full" />
         </div>
-        <SweepFixtures className="enter absolute inset-0 h-full w-full" />
 
-        <div
-          className="enter absolute inset-x-0 bottom-[12%] mx-auto flex h-[64%] w-[62%] max-w-[400px] flex-col items-center justify-end sm:h-[66%] sm:w-[30%]"
-          style={{ animationDelay: "calc(var(--t-dur-unroll) + 250ms)" }}
-        >
-          {garmentSrc ? (
-            <div className="relative h-full w-full">
-              <Image
-                src={garmentSrc}
-                alt="The garment, cut out from its original photo"
-                fill
-                priority
-                sizes="(min-width: 640px) 30vw, 62vw"
-                className="object-contain object-bottom"
-              />
+        {/* blue hoodie and mascot hang from the roll, the pink hoodie drifts on the floor */}
+        <motion.div style={{ x: farX }} className="absolute top-[7%] left-[1%] w-[30%] sm:left-[19%] sm:w-[16%]">
+          <div className="sway drop-shadow-[0_18px_18px_color-mix(in_srgb,var(--t-color-ink)_18%,transparent)]">
+            <Image src="/assets/3d/hoodie-blue.webp" alt="" width={692} height={747} sizes="(min-width: 640px) 16vw, 30vw" className="h-auto w-full" />
+          </div>
+        </motion.div>
+        <motion.div style={{ x: farX }} className="absolute top-[7%] right-[2%] w-[24%] sm:right-[20%] sm:w-[13%]">
+          <div className="sway [animation-delay:-2s]">
+            <Image src="/assets/3d/mascot.webp" alt="" width={820} height={698} sizes="(min-width: 640px) 13vw, 24vw" className="h-auto w-full" />
+          </div>
+        </motion.div>
+        <motion.div style={{ x: nearX, y: nearY }} className="absolute bottom-[9%] left-[7%] hidden w-[11%] sm:block">
+          <div className="float [animation-delay:-3s] drop-shadow-[0_16px_14px_color-mix(in_srgb,var(--t-color-ink)_22%,transparent)]">
+            <Image src="/assets/3d/hoodie-pink.webp" alt="" width={241} height={217} sizes="11vw" className="h-auto w-full" />
+          </div>
+        </motion.div>
+
+        <SweepRoll className="absolute inset-0 h-full w-full" />
+
+        <div className="absolute inset-x-0 top-[14%] bottom-[5%] [perspective:1100px] sm:top-[13%]">
+          <div className="absolute bottom-[-1%] left-1/2 h-[5%] w-[34%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--t-color-ink)_30%,transparent),transparent)] sm:w-[22%]" />
+          <motion.div
+            style={{ rotateX, rotateY, x: nearX }}
+            className="absolute left-1/2 top-0 h-full aspect-[598/1024] -translate-x-1/2 [transform-style:preserve-3d]"
+          >
+            <div className="float relative h-full w-full drop-shadow-[0_26px_30px_color-mix(in_srgb,var(--t-color-ink)_28%,transparent)]">
+              <div className="absolute top-[2.8%] left-[8.6%] h-[93.1%] w-[83%] overflow-hidden rounded-[10%/5.8%] bg-line [container-type:inline-size]">
+                <Image src="/assets/3d/before.webp" alt="" fill priority sizes="(min-width: 640px) 24vw, 46vw" className="object-cover" />
+                <div className="demo-after absolute inset-0" onAnimationIteration={(e) => {
+                  if (e.animationName === "demo-after" && !pinned) setIndex((i) => (i + 1) % papers.length);
+                }}>
+                  <div className="absolute inset-0 bg-(--paper) transition-colors duration-(--paper-dur)" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-color-bg)_32%,transparent),transparent_45%,color-mix(in_srgb,var(--t-color-ink)_9%,transparent))]" />
+                  {/* contact shadow: the same cut-out, darkened, only on the new backdrop */}
+                  <div className="absolute inset-0 translate-x-[1.5%] translate-y-[1.5%] opacity-30 blur-[6px] brightness-0">
+                    <Jeans sizes="(min-width: 640px) 24vw, 46vw" />
+                  </div>
+                </div>
+                <Jeans sizes="(min-width: 640px) 24vw, 46vw" />
+                <div className="demo-bar absolute inset-y-[-5%] left-0 w-[18%]" />
+                {sparks.map((s) => (
+                  <span
+                    key={s.y}
+                    className="demo-spark absolute left-0"
+                    style={{ top: s.y, width: s.s, height: s.s, animationDelay: s.d }}
+                  />
+                ))}
+              </div>
+              <Image src="/assets/3d/phone.webp" alt="" fill priority sizes="(min-width: 640px) 29vw, 56vw" className="pointer-events-none object-contain" />
+
+              <div className="demo-card absolute top-[34%] left-1/2 w-[50%] rounded-md sm:top-[22%] sm:w-[68%] bg-bg p-[3%] shadow-float">
+                <div className="relative aspect-[9/14] overflow-hidden rounded-sm">
+                  <div className="absolute inset-0 bg-(--paper) transition-colors duration-(--paper-dur)" />
+                  <Jeans sizes="(min-width: 640px) 16vw, 32vw" />
+                </div>
+                <span className="demo-badge absolute -top-[9%] -right-[11%] flex aspect-square w-[32%] items-center justify-center rounded-pill bg-primary shadow-float">
+                  <svg viewBox="0 0 24 24" className="w-[56%]" fill="none" stroke="var(--t-color-on-primary)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                </span>
+              </div>
             </div>
-          ) : (
-            <div
-              className={`flex h-full w-full flex-col items-center justify-center gap-3 rounded-md border-2 border-dashed border-current p-6 text-center transition-colors duration-(--t-dur-paper) ${onPaper}`}
-            >
-              <svg viewBox="0 0 64 40" className="w-14" aria-hidden="true">
-                <path
-                  d="M26 8 a6 6 0 1 1 6 6 v4 l26 16 H6 l26 -16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="max-w-[16ch] text-small font-semibold">Your garment photo goes here</p>
-            </div>
-          )}
-          {/* contact shadow */}
-          <div
-            aria-hidden="true"
-            className="-mb-3 h-6 w-[90%] shrink-0 rounded-[50%] bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--t-color-ink)_28%,transparent),transparent)]"
-          />
+          </motion.div>
         </div>
       </div>
 
@@ -123,7 +164,10 @@ export function StudioScene({ garmentSrc }: Props) {
                 name="backdrop"
                 value={p.id}
                 checked={i === index}
-                onChange={() => pick(i)}
+                onChange={() => {
+                  setIndex(i);
+                  setPinned(true);
+                }}
                 className="peer sr-only"
               />
               <span className="flex min-h-11 items-center gap-2 rounded-pill border-[1.5px] border-line py-1.5 pr-4 pl-1.5 text-small font-medium text-ink-2 transition-[border-color,color,transform] duration-(--t-dur-hover) ease-standard hover:border-ink-2 peer-checked:border-ink peer-checked:text-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-primary active:scale-[0.97] motion-reduce:active:scale-100">
@@ -137,21 +181,19 @@ export function StudioScene({ garmentSrc }: Props) {
             </label>
           ))}
         </fieldset>
-        <button
-          type="button"
-          onClick={() => setUserPlaying(!playing)}
-          aria-label={playing ? "Pause backdrop cycle" : "Play backdrop cycle"}
-          className="flex min-h-11 items-center gap-2 rounded-pill bg-ink px-4 text-small font-semibold text-bg transition-[background-color,transform] duration-(--t-dur-hover) hover:bg-ink-2 active:scale-[0.97] motion-reduce:active:scale-100"
-        >
-          <svg viewBox="0 0 16 16" className="size-4" aria-hidden="true" fill="currentColor">
-            {playing ? (
-              <path d="M4 3h3v10H4zM9 3h3v10H9z" />
-            ) : (
-              <path d="M5 3l8 5-8 5z" />
-            )}
-          </svg>
-          {playing ? "Pause" : "Play"}
-        </button>
+        {!reduceMotion && (
+          <button
+            type="button"
+            onClick={() => setPaused((v) => !v)}
+            aria-label={paused ? "Play the demo" : "Pause the demo"}
+            className="flex min-h-11 items-center gap-2 rounded-pill bg-ink px-4 text-small font-semibold text-bg transition-[background-color,transform] duration-(--t-dur-hover) hover:bg-ink-2 active:scale-[0.97]"
+          >
+            <svg viewBox="0 0 16 16" className="size-4" aria-hidden="true" fill="currentColor">
+              {paused ? <path d="M5 3l8 5-8 5z" /> : <path d="M4 3h3v10H4zM9 3h3v10H9z" />}
+            </svg>
+            {paused ? "Play" : "Pause"}
+          </button>
+        )}
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState, type FormEvent } from "react";
 import { isValidEmail } from "@/lib/email";
 import { buttonClass } from "./Button";
@@ -58,6 +59,15 @@ export function Waitlist() {
   return (
     <section id="waitlist" aria-labelledby="waitlist-title" className="mx-auto mt-32 max-w-[1240px] px-4 sm:mt-40">
       <div className="rounded-lg bg-paper-paleblue px-6 py-14 text-center sm:px-12 sm:py-20">
+        {/* the key restarts the reaction each time the form's state changes */}
+        <div
+          key={state.kind}
+          className={`mx-auto mb-5 w-24 sm:w-28 ${
+            state.kind === "demo" ? "mascot-happy" : invalid || state.kind === "failed" ? "mascot-sad" : ""
+          }`}
+        >
+          <Image src="/assets/3d/mascot.webp" alt="" width={820} height={698} sizes="112px" className="h-auto w-full" />
+        </div>
         <h2
           id="waitlist-title"
           className="font-display-tight mx-auto max-w-[16ch] text-h2 leading-heading tracking-heading text-balance"

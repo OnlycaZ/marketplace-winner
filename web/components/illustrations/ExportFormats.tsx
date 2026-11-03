@@ -1,34 +1,47 @@
-// "Ready for any marketplace": the same photo exported square and portrait.
-import { Cut, Hanger, ink, paper, white } from "./cut";
+"use client";
 
-function Frame({ w, h, label }: { w: number; h: number; label: string }) {
-  return (
-    <>
-      <Cut fill={white}>
-        <rect width={w} height={h} rx={6} />
-      </Cut>
-      <rect x={9} y={9} width={w - 18} height={h - 18} rx={3} style={{ fill: paper("butter") }} />
-      <path
-        d={`M9 ${h * 0.68} C${w * 0.35} ${h * 0.76} ${w * 0.65} ${h * 0.76} ${w - 9} ${h * 0.68} V${h - 9} H9 Z`}
-        style={{ fill: ink, opacity: 0.07 }}
-      />
-      <Hanger x={w / 2} y={h * 0.3} s={1.1} />
-      <text x={w / 2} y={h + 32} textAnchor="middle" style={{ fill: ink, font: "700 19px var(--font-figtree)" }}>
-        {label}
-      </text>
-    </>
-  );
-}
+// "Ready for any marketplace": one print that changes between square and portrait.
+import { motion, MotionConfig } from "motion/react";
+import { useState } from "react";
+import { Print3D } from "./Print3D";
+import { Tilt } from "./Tilt";
+
+const formats = [
+  { id: "square", label: "Square 1:1", width: "62%", ratio: 1 },
+  { id: "portrait", label: "Portrait 4:5", width: "52%", ratio: 4 / 5 },
+] as const;
 
 export function ExportFormats() {
+  const [format, setFormat] = useState<(typeof formats)[number]>(formats[1]);
+
   return (
-    <svg viewBox="0 0 520 300" className="w-full" aria-hidden="true">
-      <g transform="translate(70 70)">
-        <Frame w={170} h={170} label="Square 1:1" />
-      </g>
-      <g transform="translate(290 34)">
-        <Frame w={164} h={205} label="Portrait 4:5" />
-      </g>
-    </svg>
+    <MotionConfig reducedMotion="user">
+      <div className="mx-auto max-w-[360px]">
+        <Tilt className="flex h-[270px] items-center justify-center sm:h-[300px]">
+          <div className="flex h-full w-full items-center justify-center">
+            <motion.div
+              initial={false}
+              animate={{ width: format.width, aspectRatio: format.ratio }}
+              transition={{ type: "spring", duration: 0.45, bounce: 0.2 }}
+            >
+              <Print3D paper="butter" garment="hoodie-blue" className="h-full w-full" sizes="240px" />
+            </motion.div>
+          </div>
+        </Tilt>
+        <div role="group" aria-label="Photo format" className="mt-4 flex justify-center gap-2">
+          {formats.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              aria-pressed={format.id === f.id}
+              onClick={() => setFormat(f)}
+              className="min-h-11 rounded-pill bg-bg/70 px-4 text-small font-semibold text-ink transition-[background-color,color,transform] duration-(--t-dur-hover) hover:bg-bg active:scale-[0.97] aria-pressed:bg-ink aria-pressed:text-bg motion-reduce:active:scale-100"
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </MotionConfig>
   );
 }

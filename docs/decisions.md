@@ -15,4 +15,9 @@
 | 2026-11-03 | Phase 4 checks run in the app's built-in browser, not Playwright | The webapp-testing skill needs Playwright installed (a new dependency); the built-in browser covered screenshots, keyboard, slider, accordion and form | Installing Playwright for Python |
 | 2026-11-03 | Impeccable's bundled detector was not run | Its launcher downloads an executable on first run; the owner asked for no install scripts | Running the detector |
 | 2026-11-03 | Sentence case for headings and buttons, despite the Vercel guideline preferring Title Case | Matches the plain, conversational tone chosen for the page | Title Case |
+| 2026-11-04 | Illustration style moves from cut paper to 3D cartoon images, everywhere on the page | Owner wants a more 3D, playful page; one style keeps it consistent | Keeping SVG cut paper below the hero |
+| 2026-11-04 | The promise stays studio paper, not styled scenes | Wood floors and added props would sell a different product than the one the site and CLAUDE.md describe | "Better scenes" from the prototype |
+| 2026-11-04 | Hero has no sky or clouds | The blue-sky-and-clouds composition is too close to Rewinder's hero | Using `sky.webp` as is |
+| 2026-11-04 | Hero demo uses one jeans cut-out on top of both states | In the prototype the jeans were about 30% brighter in the "after" image, which contradicts the rule that garment pixels never change | Crossfading the two prototype images |
+| 2026-11-04 | No Three.js: 3D look comes from images, CSS and Motion | No new dependency, small download, works on phones | A real-time 3D scene |
 | 2026-11-03 | Primary blue `#1F44C8` (cobalt ink), white text on it 7.7:1 | Deeper than Rewinder's sky blue, less electric than Droppy's; sits well next to the paper colours | Brighter, saturated blues close to the references |

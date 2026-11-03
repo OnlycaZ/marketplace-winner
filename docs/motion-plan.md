@@ -47,6 +47,25 @@ Only `transform`, `opacity`, `clip-path` and colour are animated. Hover effects 
 | Parallax or movement on the giant footer name | Decoration |
 | Hover lift on cards | The cards aren't clickable; a lift suggests they are |
 
+## Added 2026-11-04 (3D direction)
+
+These replace #2 (backdrop cycle) and extend #5. The earlier "Cut" list still applies to scroll fades.
+
+| Animation | Why it exists | How often it's seen | Duration / curve | Reduced motion |
+| --- | --- | --- | --- | --- |
+| **Hero demo loop.** Phone shows the original photo, the paper wipes in behind the jeans, the finished print pops out with a tick. Each loop uses the next paper. | It is the product, shown in 8 seconds | Runs while visible; Pause button | 8s loop; wipe 1.1s `ease-in-out`; print spring-like overshoot | No loop: finished state, static; no Pause button |
+| **Phone tilt and parallax** following the cursor | Gives the 3D objects depth and rewards exploring | Mouse only | Motion spring, no fixed duration | Off |
+| **Idle float and sway** of phone, hoodies, mascot | Makes the studio feel alive; slow enough to ignore | Runs with the demo, same Pause | 6s `ease-in-out` | Off |
+| **Menu: sliding highlight** between links, and current section marked | Shows where you are and where you're going | On hover and while scrolling | Spring ~350ms, bounce 0.15 | Instant |
+| **Menu: reading progress line** | Orientation on a long page | While scrolling | Tied to scroll | Stays, it isn't movement of its own |
+| **Mascot swing** in the menu, on hover and when the section changes | Small feedback with personality | Occasional | 700ms `ease-in-out` | Off |
+| **Phone menu** opening | Shows where the panel comes from | Occasional | 180ms `ease-out`, scale from 0.96 | Opacity only |
+| **Review card:** Approve puts a tick on the print, Redo flips it onto the next paper | Lets people try the approval step instead of reading about it | When clicked | spring 400–500ms | Opacity only |
+| **Export card:** the print changes between square and portrait (replaces the "Cut" entry for this morph, now that the visitor triggers it) | Shows both formats on one object | When clicked | spring 450ms | Instant |
+| **How it works:** each step plays once when it scrolls into view (photos drop, paper pulls down, tick lands) | The movement is the explanation of the step | Once per visit | spring 700ms, bounce 0.35 | Opacity only |
+| **Tilt** on steps and export print | Depth for the 3D objects | Mouse only | Motion spring | Off |
+| **Mascot:** hops when the form works, shakes on an error, swings when an FAQ opens | Feedback with personality | When triggered | 420–700ms | Off; the text messages carry the meaning |
+
 ## Implementation notes
 
 - **CSS transitions** for buttons, menu, swatches, accordion and form: they are interruptible and run off the main thread.

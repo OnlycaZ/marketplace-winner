@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useId, useState } from "react";
 
 const faqs = [
@@ -26,7 +27,7 @@ const faqs = [
   },
 ];
 
-function Item({ q, a }: { q: string; a: string }) {
+function Item({ q, a, onToggle }: { q: string; a: string; onToggle: () => void }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
@@ -37,7 +38,10 @@ function Item({ q, a }: { q: string; a: string }) {
           aria-expanded={open}
           aria-controls={`${id}-panel`}
           id={`${id}-button`}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            setOpen((v) => !v);
+            onToggle();
+          }}
           className="flex w-full items-center justify-between gap-6 py-6 text-left text-lead font-semibold"
         >
           {q}
@@ -72,14 +76,19 @@ function Item({ q, a }: { q: string; a: string }) {
 }
 
 export function Faq() {
+  // Each question opened gives the mascot a small swing.
+  const [swings, setSwings] = useState(0);
   return (
     <section id="faq" aria-labelledby="faq-title" className="mx-auto mt-32 max-w-[820px] px-4 sm:mt-40">
+      <div key={swings} className="swing-once mx-auto mb-4 w-20">
+        <Image src="/assets/3d/mascot.webp" alt="" width={820} height={698} sizes="80px" className="h-auto w-full" />
+      </div>
       <h2 id="faq-title" className="font-display-tight text-center text-h2 leading-heading tracking-heading">
         Questions
       </h2>
       <ul className="mt-10 border-t border-line">
         {faqs.map((f) => (
-          <Item key={f.q} {...f} />
+          <Item key={f.q} {...f} onToggle={() => setSwings((n) => n + 1)} />
         ))}
       </ul>
     </section>

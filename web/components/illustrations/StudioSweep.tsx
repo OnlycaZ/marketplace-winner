@@ -1,7 +1,7 @@
-// Hero studio: a paper backdrop hanging from a roll and curving into the floor,
-// with a softbox and a spot lamp. Cut-paper style: flat shapes, no outlines,
-// short hard shadows, 2px detail lines. Colours come only from tokens.
-// Split into two layers that share one viewBox so the paper can animate on its own.
+// Hero studio: a paper backdrop hanging from a roll and curving into the floor.
+// Two layers share one viewBox so the paper can unroll on its own. The stage keeps
+// the same 5:3 ratio on wide screens, so anything placed in % lines up with the roll.
+// Colours come only from tokens.
 
 const VIEWBOX = "0 0 1200 720";
 const PAPER = "M250 70 H950 V420 C950 560 1010 620 1200 650 V720 H0 V650 C190 620 250 560 250 420 Z";
@@ -48,33 +48,19 @@ export function SweepPaper({ className }: LayerProps) {
   );
 }
 
-const lift = { fill: "var(--t-color-ink)", opacity: 0.14 };
-const line = {
-  fill: "none",
-  stroke: "var(--t-color-ink)",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
-
-// Roll, softbox and lamp, drawn on top of the paper.
-export function SweepFixtures({ className }: LayerProps) {
-  const roll = { x: 226, y: 44, width: 748, height: 30, rx: 15 };
-  const softbox = "M58 196 L232 170 L248 360 L74 386 Z";
+// The roll, shaded like a soft cylinder to match the 3D objects hanging from it.
+export function SweepRoll({ className }: LayerProps) {
   return (
     <svg viewBox={VIEWBOX} preserveAspectRatio="xMidYMax slice" className={className} aria-hidden="true">
-      <rect {...roll} transform="translate(4 6)" style={lift} />
-      <rect {...roll} style={{ fill: "var(--t-paper-charcoal)" }} />
-
-      <path d="M112 720 L156 430 M200 720 L156 430 M156 430 V720 M156 374 V430" style={line} />
-      <path d={softbox} transform="translate(5 7)" style={lift} />
-      <path d={softbox} style={{ fill: "var(--t-color-bg)" }} />
-      <path d="M86 214 L218 194 L230 340 L98 360 Z" style={{ ...line, strokeDasharray: "2 7", opacity: 0.45 }} />
-
-      <path d="M1082 336 V720 M1040 720 L1082 640 L1124 720" style={line} />
-      <circle cx="1082" cy="292" r="50" transform="translate(5 7)" style={lift} />
-      <circle cx="1082" cy="292" r="50" style={{ fill: "var(--t-paper-charcoal)" }} />
-      <circle cx="1082" cy="292" r="32" style={{ fill: "var(--t-color-bg)", opacity: 0.92 }} />
+      <defs>
+        <linearGradient id="sweep-roll" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--t-paper-charcoal)" stopOpacity="0.72" />
+          <stop offset="0.4" stopColor="var(--t-paper-charcoal)" />
+          <stop offset="1" stopColor="var(--t-color-ink)" />
+        </linearGradient>
+      </defs>
+      <rect x="226" y="50" width="748" height="30" rx="15" transform="translate(0 7)" style={{ fill: "var(--t-color-ink)", opacity: 0.12 }} />
+      <rect x="226" y="44" width="748" height="30" rx="15" fill="url(#sweep-roll)" />
     </svg>
   );
 }

@@ -39,6 +39,7 @@ export function Features() {
           tone="sage"
           title="You approve every photo"
           text="Nothing is final until you say so. Approve the good ones, redo the rest."
+          bleed={false}
         >
           <ReviewScreen />
         </FeatureCard>
@@ -46,6 +47,7 @@ export function Features() {
           tone="powder"
           title="Ready for any marketplace"
           text="Download each photo square or portrait, sized for the listing."
+          bleed={false}
         >
           <ExportFormats />
         </FeatureCard>

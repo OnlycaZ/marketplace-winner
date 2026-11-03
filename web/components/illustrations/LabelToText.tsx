@@ -1,20 +1,24 @@
-// "Coming later": a garment label turning into listing text.
-import { Cut, ink, line, paper, white } from "./cut";
+// "Coming later": a garment label turning into listing text, in soft 3D.
+const lines = ["w-[92%]", "w-[84%]", "w-[92%]", "w-[60%]"];
 
 export function LabelToText() {
   return (
-    <svg viewBox="0 0 360 200" className="w-full" aria-hidden="true">
-      <Cut fill={paper("butter")}>
-        <path d="M40 60 H150 V150 H40 L20 105 Z" />
-      </Cut>
-      <circle cx={42} cy={105} r={6} style={{ fill: paper("charcoal") }} />
-      <path d="M66 86 H128 M66 104 H116 M66 122 H124" style={line} />
-      <path d="M170 105 H196 m-8 -8 l8 8 l-8 8" style={{ ...line, stroke: white }} />
-      <Cut fill={white}>
-        <rect x={214} y={40} width={126} height={130} rx={10} />
-      </Cut>
-      <rect x={230} y={58} width={78} height={10} rx={5} style={{ fill: ink }} />
-      <path d="M230 90 H322 M230 108 H316 M230 126 H322 M230 144 H290" style={{ ...line, opacity: 0.5 }} />
-    </svg>
+    <div className="relative mx-auto flex items-center justify-center gap-5" aria-hidden="true">
+      <div className="relative h-[120px] w-[138px] shrink-0 -rotate-6 rounded-md bg-paper-butter p-4 pl-11 shadow-clay">
+        <span className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 rounded-pill bg-paper-charcoal shadow-[inset_0_2px_3px_var(--t-color-ink)]" />
+        <span className="mt-3 block h-2 w-[90%] rounded-pill bg-ink/70" />
+        <span className="mt-3 block h-2 w-[70%] rounded-pill bg-ink/70" />
+        <span className="mt-3 block h-2 w-[82%] rounded-pill bg-ink/70" />
+      </div>
+      <svg viewBox="0 0 24 24" className="size-7 shrink-0 text-bg" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 12h15M13 6l6 6-6 6" />
+      </svg>
+      <div className="w-[138px] shrink-0 rotate-3 rounded-md bg-bg p-4 shadow-clay">
+        <span className="block h-3 w-[70%] rounded-pill bg-ink" />
+        {lines.map((w, i) => (
+          <span key={i} className={`mt-2.5 block h-2 rounded-pill bg-line ${w}`} />
+        ))}
+      </div>
+    </div>
   );
 }
