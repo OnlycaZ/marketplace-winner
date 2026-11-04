@@ -71,6 +71,12 @@ function Jeans({ sizes }: { sizes: string }) {
   return <Image unoptimized src="/assets/3d/jeans.webp" alt="" fill sizes={sizes} className="object-cover" />;
 }
 
+// The new backdrop, with its own shadows. The jeans cut-out is drawn on top of it and lines up
+// exactly, because both come from the same frame at the same size.
+function Wood({ sizes }: { sizes: string }) {
+  return <Image unoptimized src="/assets/3d/wood.webp" alt="" fill sizes={sizes} className="object-cover" />;
+}
+
 export function StudioScene() {
   const [index, setIndex] = useState(START);
   const [pinned, setPinned] = useState(false);
@@ -119,7 +125,7 @@ export function StudioScene() {
       <div
         ref={stageRef}
         role="img"
-        aria-label="A phone shows a photo of jeans on a grey sheet. Coloured studio paper wipes in behind the jeans, which stay exactly the same, and the finished photo pops out approved."
+        aria-label="A phone shows a photo of jeans on a grey sheet. A warm wooden floor wipes in behind the jeans, which stay exactly the same, and the finished photo pops out approved."
         data-running={running}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
@@ -157,12 +163,7 @@ export function StudioScene() {
                 <div className="demo-after absolute inset-0" onAnimationIteration={(e) => {
                   if (e.animationName === "demo-after" && !pinned) setIndex((i) => (i + 1) % papers.length);
                 }}>
-                  <div className="absolute inset-0 bg-(--paper) transition-colors duration-(--paper-dur)" />
-                  <div className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-color-bg)_32%,transparent),transparent_45%,color-mix(in_srgb,var(--t-color-ink)_9%,transparent))]" />
-                  {/* contact shadow: the same cut-out, darkened, only on the new backdrop */}
-                  <div className="absolute inset-0 translate-x-[1.5%] translate-y-[1.5%] opacity-30 blur-[6px] brightness-0">
-                    <Jeans sizes="(min-width: 640px) 24vw, 46vw" />
-                  </div>
+                  <Wood sizes="(min-width: 640px) 24vw, 46vw" />
                 </div>
                 <Jeans sizes="(min-width: 640px) 24vw, 46vw" />
                 <div className="demo-bar absolute inset-y-[-5%] left-0 w-[18%]" />
@@ -178,7 +179,7 @@ export function StudioScene() {
 
               <div className="demo-card absolute top-[34%] left-1/2 w-[50%] rounded-md sm:top-[22%] sm:w-[68%] bg-bg p-[3%] shadow-float">
                 <div className="relative aspect-[9/14] overflow-hidden rounded-sm">
-                  <div className="absolute inset-0 bg-(--paper) transition-colors duration-(--paper-dur)" />
+                  <Wood sizes="(min-width: 640px) 16vw, 32vw" />
                   <Jeans sizes="(min-width: 640px) 16vw, 32vw" />
                 </div>
                 <span className="demo-badge absolute -top-[9%] -right-[11%] flex aspect-square w-[32%] items-center justify-center rounded-pill bg-primary shadow-float">

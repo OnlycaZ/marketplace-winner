@@ -25,3 +25,4 @@
 | 2026-11-04 | Menu mascot is a small vector drawing, not the image | At 28px the image went soft on every screen; a vector stays sharp | Upscaling the image further |
 | 2026-11-04 | No Three.js: 3D look comes from images, CSS and Motion | No new dependency, small download, works on phones | A real-time 3D scene |
 | 2026-11-03 | Primary blue `#1F44C8` (cobalt ink), white text on it 7.7:1 | Deeper than Rewinder's sky blue, less electric than Droppy's; sits well next to the paper colours | Brighter, saturated blues close to the references |
+| 2026-11-05 | Hero phone demo shows the wooden floor from the prototype instead of paper; the swatches now only change the wall behind the phone | Owner's request; this reverses the 2026-11-04 "studio paper, not styled scenes" choice for this demo only. The jeans cut-out still sits on top, so its pixels stay the same | Keeping paper in the phone |
