@@ -81,7 +81,7 @@ export function Faq() {
   return (
     <section id="faq" aria-labelledby="faq-title" className="mx-auto mt-32 max-w-[820px] px-4 sm:mt-40">
       <div key={swings} className="swing-once mx-auto mb-4 w-20">
-        <Image unoptimized src="/assets/3d/mascot.webp" alt="" width={1638} height={1395} sizes="80px" className="h-auto w-full" />
+        <Image unoptimized src="/assets/3d/mascot.webp" alt="" width={640} height={545} sizes="80px" className="h-auto w-full" />
       </div>
       <h2 id="faq-title" className="font-display-tight text-center text-h2 leading-heading tracking-heading">
         Questions

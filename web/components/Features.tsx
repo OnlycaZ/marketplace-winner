@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BeforeAfter } from "./BeforeAfter";
+import { BeforeAfterCard } from "./BeforeAfter";
 import { FeatureCard } from "./FeatureCard";
 import { ExportFormats } from "./illustrations/ExportFormats";
 import { PhotoStack } from "./illustrations/PhotoStack";
@@ -19,17 +19,10 @@ export function Features() {
         The garment stays. The background changes.
       </h2>
       <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:gap-5">
+        <BeforeAfterCard />
         <FeatureCard
           tone="surface"
           className="lg:col-span-7"
-          title="The garment stays untouched"
-          text="We cut out the garment and only change what’s behind it. Drag the line to compare."
-        >
-          <BeforeAfter />
-        </FeatureCard>
-        <FeatureCard
-          tone="sky"
-          className="lg:col-span-5"
           title="Whole batches at once"
           text="Drop in every photo from today’s shoot. They all get the same backdrop."
           onPointerEnter={() => setStackHover(true)}
@@ -48,10 +41,10 @@ export function Features() {
         </FeatureCard>
         <FeatureCard
           tone="ink"
-          className="lg:col-span-7"
+          split
+          className="lg:col-span-12"
           title="Ready for any marketplace"
           text="Download each photo square or portrait, sized for the listing."
-          bleed={false}
         >
           <ExportFormats />
         </FeatureCard>

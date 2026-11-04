@@ -65,6 +65,7 @@ These replace #2 (backdrop cycle) and extend #5. The earlier "Cut" list still ap
 | **Review card:** Approve puts a tick on the print, Redo flips it onto the next paper | Lets people try the approval step instead of reading about it | When clicked | spring 400–500ms | Opacity only |
 | **Export card:** the print changes between square and portrait (replaces the "Cut" entry for this morph, now that the visitor triggers it) | Shows both formats on one object | When clicked | spring 450ms | Instant |
 | **How it works:** each step plays once when it scrolls into view (photos drop, paper pulls down, tick lands) | The movement is the explanation of the step | Once per visit | spring 700ms, bounce 0.35 | Opacity only |
+| **Before/after hint:** the line sweeps once when first seen, then follows the visitor 1:1 | Shows that it can be dragged; stops on first touch | Once per visit | 1.8s `ease-in-out` | Off |
 | **Tilt** on steps and export print | Depth for the 3D objects | Mouse only | Motion spring | Off |
 | **Mascot:** hops when the form works, shakes on an error, swings when an FAQ opens | Feedback with personality | When triggered | 420–700ms | Off; the text messages carry the meaning |
 

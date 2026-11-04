@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import {
   AnimatePresence,
@@ -10,10 +9,12 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
+  useTransform,
 } from "motion/react";
 import { ease } from "@/lib/tokens";
 import { site } from "@/lib/site";
 import { buttonClass } from "./Button";
+import { MascotIcon } from "./illustrations/MascotIcon";
 
 const links = [
   { id: "how-it-works", label: "How it works" },
@@ -33,6 +34,8 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
+  // At the very top the round line cap would show as a stray dot.
+  const ringOpacity = useTransform(scrollYProgress, [0, 0.01], [0, 1]);
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -127,22 +130,27 @@ export function Nav() {
             className="group mr-auto flex min-w-0 items-center gap-2.5 pr-2 font-display text-lg font-extrabold tracking-tight [font-stretch:90%] max-[439px]:text-base max-[439px]:[font-stretch:82%] md:mr-1"
           >
             {/* The mascot on a white chip, ringed by how far down the page you are. */}
-            <span className="relative flex size-10 shrink-0 items-center justify-center rounded-pill bg-bg shadow-clay">
-              <svg viewBox="0 0 40 40" className="absolute inset-0 size-full -rotate-90" aria-hidden="true">
-                <motion.circle
-                  cx="20"
-                  cy="20"
-                  r="18.5"
-                  fill="none"
-                  stroke="var(--t-color-primary)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  style={{ pathLength: scrollYProgress }}
-                />
+            <span className="relative flex size-12 shrink-0 items-center justify-center">
+              {/* Disc and ring are one drawing with a gap between them: two touching edges looked jagged. */}
+              <svg viewBox="0 0 48 48" className="absolute inset-0 size-full" shapeRendering="geometricPrecision" aria-hidden="true">
+                <circle cx="24" cy="24" r="19" fill="var(--t-color-bg)" />
+                <circle cx="24" cy="24" r="22.5" fill="none" stroke="var(--t-color-bg)" strokeOpacity="0.18" strokeWidth="2.5" />
+                <g transform="rotate(-90 24 24)">
+                  <motion.circle
+                    cx="24"
+                    cy="24"
+                    r="22.5"
+                    fill="none"
+                    stroke="var(--t-color-bg)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    style={{ pathLength: scrollYProgress, opacity: ringOpacity }}
+                  />
+                </g>
               </svg>
               {/* the key restarts the swing each time the current section changes */}
-              <span key={active ?? "top"} className="swing-once group-hover:animate-[swing_var(--t-dur-swing)_var(--ease-in-out)]">
-                <Image unoptimized src="/assets/3d/mascot.webp" alt="" width={28} height={24} className="h-auto w-7" />
+              <span key={active ?? "top"} className="swing-once relative group-hover:animate-[swing_var(--t-dur-swing)_var(--ease-in-out)]">
+                <MascotIcon className="block h-auto w-7" />
               </span>
             </span>
             <span className="truncate">{site.name}</span>

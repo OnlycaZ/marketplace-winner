@@ -2,9 +2,9 @@
 
 // "Whole batches at once": a stack of prints that fans out on hover
 // (docs/motion-plan.md #7). Touch screens and reduced motion get the fanned state, static.
-import { motion, useReducedMotion } from "motion/react";
-import { useSyncExternalStore } from "react";
+import { motion } from "motion/react";
 import { ease, type PaperId } from "@/lib/tokens";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { Print3D, type Garment } from "./Print3D";
 
 const prints: { paper: PaperId; garment: Garment; rest: Pose; fan: Pose }[] = [
@@ -17,17 +17,10 @@ const prints: { paper: PaperId; garment: Garment; rest: Pose; fan: Pose }[] = [
 
 type Pose = { x: string; y: number; rotate: number };
 
-const hoverQuery = "(hover: hover) and (pointer: fine)";
-const subscribe = (cb: () => void) => {
-  const mq = window.matchMedia(hoverQuery);
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
-};
-
 export function PhotoStack({ fanned }: { fanned: boolean }) {
-  const reduceMotion = useReducedMotion();
-  const canHover = useSyncExternalStore(subscribe, () => window.matchMedia(hoverQuery).matches, () => true);
-  const open = fanned || !canHover || !!reduceMotion;
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)", false);
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)", true);
+  const open = fanned || !canHover || reduceMotion;
 
   return (
     <div className="relative mx-auto h-[250px] max-w-[520px] sm:h-[320px]" aria-hidden="true">
@@ -38,7 +31,9 @@ export function PhotoStack({ fanned }: { fanned: boolean }) {
           animate={open ? p.fan : p.rest}
           whileHover={open && !reduceMotion ? { y: p.fan.y - 18, scale: 1.04 } : undefined}
           transition={
-            open
+            reduceMotion
+              ? { duration: 0 }
+              : open
               ? { type: "spring", duration: 0.45, bounce: 0.25 }
               : { duration: 0.2, ease: ease.out as unknown as [number, number, number, number] }
           }

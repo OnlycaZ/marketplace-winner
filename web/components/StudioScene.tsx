@@ -23,8 +23,8 @@ const sparks = [
 const hangers = [
   {
     src: "/assets/3d/hoodie-blue.webp",
-    width: 1385,
-    height: 1495,
+    width: 720,
+    height: 777,
     place: "top-[6%] left-[1%] w-[30%] sm:left-[20%] sm:w-[16%]",
     sizes: "(min-width: 640px) 16vw, 30vw",
     hook: "52% 4.6%",
@@ -33,8 +33,8 @@ const hangers = [
   },
   {
     src: "/assets/3d/mascot.webp",
-    width: 1638,
-    height: 1395,
+    width: 640,
+    height: 545,
     place: "top-[5.5%] right-[2%] w-[24%] sm:top-[5.3%] sm:right-[20%] sm:w-[13%]",
     sizes: "(min-width: 640px) 13vw, 24vw",
     hook: "48% 10.5%",
@@ -219,19 +219,18 @@ export function StudioScene() {
             </label>
           ))}
         </fieldset>
-        {!reduceMotion && (
-          <button
-            type="button"
-            onClick={() => setPaused((v) => !v)}
-            aria-label={paused ? "Play the demo" : "Pause the demo"}
-            className="flex min-h-11 items-center gap-2 rounded-pill bg-ink px-4 text-small font-semibold text-bg transition-[background-color,transform] duration-(--t-dur-hover) hover:bg-ink-2 active:scale-[0.97]"
-          >
-            <svg viewBox="0 0 16 16" className="size-4" aria-hidden="true" fill="currentColor">
-              {paused ? <path d="M5 3l8 5-8 5z" /> : <path d="M4 3h3v10H4zM9 3h3v10H9z" />}
-            </svg>
-            {paused ? "Play" : "Pause"}
-          </button>
-        )}
+        {/* Hidden by CSS, not by JavaScript: the server can't know this setting, and the HTML must match. */}
+        <button
+          type="button"
+          onClick={() => setPaused((v) => !v)}
+          aria-label={paused ? "Play the demo" : "Pause the demo"}
+          className="flex min-h-11 items-center gap-2 rounded-pill bg-ink px-4 text-small font-semibold text-bg transition-[background-color,transform] duration-(--t-dur-hover) hover:bg-ink-2 active:scale-[0.97] motion-reduce:hidden"
+        >
+          <svg viewBox="0 0 16 16" className="size-4" aria-hidden="true" fill="currentColor">
+            {paused ? <path d="M5 3l8 5-8 5z" /> : <path d="M4 3h3v10H4zM9 3h3v10H9z" />}
+          </svg>
+          {paused ? "Play" : "Pause"}
+        </button>
       </div>
     </section>
   );
