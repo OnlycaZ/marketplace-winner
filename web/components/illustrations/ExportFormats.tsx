@@ -24,7 +24,7 @@ export function ExportFormats() {
               animate={{ width: format.width, aspectRatio: format.ratio }}
               transition={{ type: "spring", duration: 0.45, bounce: 0.2 }}
             >
-              <Print3D paper="butter" garment="hoodie-blue" className="h-full w-full" sizes="240px" />
+              <Print3D paper="paleblue" garment="hoodie-blue" className="h-full w-full" sizes="240px" />
             </motion.div>
           </div>
         </Tilt>
@@ -35,7 +35,7 @@ export function ExportFormats() {
               type="button"
               aria-pressed={format.id === f.id}
               onClick={() => setFormat(f)}
-              className="min-h-11 rounded-pill bg-bg/70 px-4 text-small font-semibold text-ink transition-[background-color,color,transform] duration-(--t-dur-hover) hover:bg-bg active:scale-[0.97] aria-pressed:bg-ink aria-pressed:text-bg motion-reduce:active:scale-100"
+              className="min-h-11 rounded-pill bg-bg/15 px-4 text-small font-semibold text-bg transition-[background-color,color,transform] duration-(--t-dur-hover) hover:bg-bg/25 focus-visible:outline-bg active:scale-[0.97] aria-pressed:bg-bg aria-pressed:text-ink motion-reduce:active:scale-100"
             >
               {f.label}
             </button>

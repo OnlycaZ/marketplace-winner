@@ -40,7 +40,7 @@ export function BeforeAfter({ beforeSrc, afterSrc }: Props) {
             className="object-cover"
           />
         ) : (
-          <Placeholder className="bg-paper-butter" />
+          <Placeholder className="bg-paper-paleblue" />
         )}
       </div>
 

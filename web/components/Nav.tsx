@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, MotionConfig, useScroll } from "motion/react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from "motion/react";
 import { ease } from "@/lib/tokens";
 import { site } from "@/lib/site";
 import { buttonClass } from "./Button";
@@ -13,17 +21,32 @@ const links = [
   { id: "faq", label: "FAQ" },
 ];
 
+const easeOut = ease.out as unknown as [number, number, number, number];
+const magnet = { stiffness: 220, damping: 15, mass: 0.4 };
+
 export function Nav() {
   const [compact, setCompact] = useState(false);
+  const [folded, setFolded] = useState(false);
+  const [engaged, setEngaged] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
+  // Reading down the page the links fold away; scrolling up, hovering or tabbing brings them back.
   useEffect(() => {
-    const onScroll = () => setCompact(window.scrollY > 24);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setCompact(y > 24);
+      if (y < window.innerHeight * 0.6) setFolded(false);
+      else if (y - last > 4) setFolded(true);
+      else if (last - y > 4) setFolded(false);
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -68,7 +91,22 @@ export function Nav() {
     };
   }, [open]);
 
+  // The main button leans a few pixels toward the cursor.
+  const ctaX = useSpring(useMotionValue(0), magnet);
+  const ctaY = useSpring(useMotionValue(0), magnet);
+  const onCtaMove = (e: PointerEvent<HTMLAnchorElement>) => {
+    if (e.pointerType !== "mouse" || reduceMotion) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    ctaX.set((e.clientX - r.left - r.width / 2) * 0.16);
+    ctaY.set((e.clientY - r.top - r.height / 2) * 0.28);
+  };
+  const onCtaLeave = () => {
+    ctaX.set(0);
+    ctaY.set(0);
+  };
+
   const highlighted = hovered ?? active;
+  const showLinks = !folded || engaged;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -77,49 +115,82 @@ export function Nav() {
           ref={navRef}
           aria-label="Main"
           data-compact={compact}
-          className="pointer-events-auto relative flex w-full max-w-[760px] origin-top items-center gap-2 rounded-pill bg-ink/80 p-1.5 pl-3 text-bg shadow-float backdrop-blur-md transition-[transform,background-color] duration-(--t-dur-ui) ease-out data-[compact=true]:scale-[0.96] data-[compact=true]:bg-ink/92 [&_:focus-visible]:outline-bg"
+          onPointerEnter={() => setEngaged(true)}
+          onPointerLeave={() => setEngaged(false)}
+          onFocusCapture={() => setEngaged(true)}
+          onBlurCapture={() => setEngaged(false)}
+          className="pointer-events-auto relative flex w-full items-center gap-2 rounded-pill bg-ink/75 p-1.5 text-bg shadow-[inset_0_1px_0_color-mix(in_srgb,var(--t-color-bg)_22%,transparent),inset_0_-2px_6px_color-mix(in_srgb,var(--t-color-ink)_40%,transparent),var(--t-shadow-float)] backdrop-blur-md transition-[background-color] duration-(--t-dur-ui) ease-out data-[compact=true]:bg-ink/92 md:w-auto [&_:focus-visible]:outline-bg"
         >
           <a
             href="#top"
             translate="no"
-            className="group mr-auto flex min-w-0 items-center gap-2 font-display text-lg font-extrabold tracking-tight [font-stretch:90%] max-[439px]:text-base max-[439px]:[font-stretch:82%]"
+            className="group mr-auto flex min-w-0 items-center gap-2.5 pr-2 font-display text-lg font-extrabold tracking-tight [font-stretch:90%] max-[439px]:text-base max-[439px]:[font-stretch:82%] md:mr-1"
           >
-            {/* the key restarts the swing each time the current section changes */}
-            <span key={active ?? "top"} className="swing-once shrink-0 group-hover:animate-[swing_var(--t-dur-swing)_var(--ease-in-out)]">
-              <Image src="/assets/3d/mascot.webp" alt="" width={34} height={29} className="h-auto w-8.5" />
+            {/* The mascot on a white chip, ringed by how far down the page you are. */}
+            <span className="relative flex size-10 shrink-0 items-center justify-center rounded-pill bg-bg shadow-clay">
+              <svg viewBox="0 0 40 40" className="absolute inset-0 size-full -rotate-90" aria-hidden="true">
+                <motion.circle
+                  cx="20"
+                  cy="20"
+                  r="18.5"
+                  fill="none"
+                  stroke="var(--t-color-primary)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  style={{ pathLength: scrollYProgress }}
+                />
+              </svg>
+              {/* the key restarts the swing each time the current section changes */}
+              <span key={active ?? "top"} className="swing-once group-hover:animate-[swing_var(--t-dur-swing)_var(--ease-in-out)]">
+                <Image unoptimized src="/assets/3d/mascot.webp" alt="" width={28} height={24} className="h-auto w-7" />
+              </span>
             </span>
             <span className="truncate">{site.name}</span>
           </a>
 
-          <ul className="hidden items-center md:flex" onPointerLeave={() => setHovered(null)}>
-            {links.map((l) => (
-              <li key={l.id}>
-                <a
-                  href={`#${l.id}`}
-                  aria-current={active === l.id ? "true" : undefined}
-                  onPointerEnter={() => setHovered(l.id)}
-                  onFocus={() => setHovered(l.id)}
-                  onBlur={() => setHovered(null)}
-                  className="relative block rounded-pill px-4 py-2 text-small font-medium text-bg/85 transition-colors duration-(--t-dur-hover) hover:text-bg aria-[current=true]:text-bg"
-                >
-                  {highlighted === l.id && (
-                    <motion.span
-                      layoutId="nav-highlight"
-                      className="absolute inset-0 rounded-pill bg-bg/15"
-                      transition={{ type: "spring", duration: 0.35, bounce: 0.15 }}
-                    />
-                  )}
-                  <span className="relative">{l.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          {/* Folding uses grid columns, so the pill keeps its natural width and stays interruptible. */}
+          <div
+            className="hidden transition-[grid-template-columns,opacity] duration-300 ease-out md:grid"
+            style={{ gridTemplateColumns: showLinks ? "1fr" : "0fr", opacity: showLinks ? 1 : 0 }}
+          >
+            <ul className="flex min-w-0 items-center overflow-hidden py-1" onPointerLeave={() => setHovered(null)}>
+              {links.map((l) => (
+                <li key={l.id}>
+                  <a
+                    href={`#${l.id}`}
+                    aria-current={active === l.id ? "true" : undefined}
+                    onPointerEnter={() => setHovered(l.id)}
+                    onFocus={() => setHovered(l.id)}
+                    onBlur={() => setHovered(null)}
+                    className={`relative block rounded-pill px-4 py-2 text-small font-semibold whitespace-nowrap transition-colors duration-(--t-dur-hover) ${
+                      highlighted === l.id ? "text-ink" : "text-bg/85"
+                    }`}
+                  >
+                    {highlighted === l.id && (
+                      <motion.span
+                        layoutId="nav-highlight"
+                        className="absolute inset-0 rounded-pill bg-bg shadow-clay"
+                        transition={{ type: "spring", duration: 0.4, bounce: 0.22 }}
+                      />
+                    )}
+                    <span className="relative">{l.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <a href="#waitlist" className={buttonClass("inverse", "min-h-10 shrink-0 px-5 text-small max-[439px]:px-4")}>
+          <motion.a
+            href="#waitlist"
+            style={{ x: ctaX, y: ctaY }}
+            onPointerMove={onCtaMove}
+            onPointerLeave={onCtaLeave}
+            className={buttonClass("primary", "ml-1 min-h-10 shrink-0 px-5 text-small shadow-clay max-[439px]:px-4")}
+          >
             {/* narrow phones: the short label leaves room for the name and the menu button */}
             <span className="max-[439px]:hidden">Join the waitlist</span>
             <span className="min-[440px]:hidden">Join</span>
-          </a>
+          </motion.a>
 
           <button
             ref={toggleRef}
@@ -131,16 +202,10 @@ export function Nav() {
             className="flex size-10 shrink-0 items-center justify-center rounded-pill text-bg transition-colors duration-(--t-dur-hover) hover:bg-bg/15 md:hidden"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
+              <motion.path initial={false} animate={{ d: open ? "M6 6L18 18" : "M4 8L20 8" }} transition={{ duration: 0.18, ease: easeOut }} />
+              <motion.path initial={false} animate={{ d: open ? "M18 6L6 18" : "M4 16L20 16" }} transition={{ duration: 0.18, ease: easeOut }} />
             </svg>
           </button>
-
-          {/* how far down the page you are */}
-          <motion.span
-            aria-hidden="true"
-            style={{ scaleX: scrollYProgress }}
-            className="absolute inset-x-7 bottom-0 h-0.5 origin-left rounded-pill bg-bg/60"
-          />
 
           <AnimatePresence>
             {open && (
@@ -149,20 +214,25 @@ export function Nav() {
                 initial={{ opacity: 0, scale: 0.96, y: -6 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96, y: -6 }}
-                transition={{ duration: 0.18, ease: ease.out as unknown as [number, number, number, number] }}
+                transition={{ duration: 0.18, ease: easeOut }}
                 className="absolute inset-x-0 top-full mt-2 origin-top rounded-lg bg-ink/95 p-2 shadow-float backdrop-blur-md md:hidden"
               >
-                {links.map((l) => (
-                  <li key={l.id}>
+                {links.map((l, i) => (
+                  <motion.li
+                    key={l.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: 0.04 + i * 0.04, ease: easeOut }}
+                  >
                     <a
                       href={`#${l.id}`}
                       aria-current={active === l.id ? "true" : undefined}
                       onClick={() => setOpen(false)}
-                      className="flex min-h-12 items-center rounded-md px-4 font-medium text-bg hover:bg-bg/10 aria-[current=true]:bg-bg/15"
+                      className="flex min-h-12 items-center rounded-md px-4 font-medium text-bg hover:bg-bg/10 aria-[current=true]:bg-bg aria-[current=true]:text-ink"
                     >
                       {l.label}
                     </a>
-                  </li>
+                  </motion.li>
                 ))}
               </motion.ul>
             )}

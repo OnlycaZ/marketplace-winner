@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { papers } from "@/lib/tokens";
+import { sitePapers as papers } from "@/lib/tokens";
 import { SweepPaper, SweepRoll } from "./illustrations/StudioSweep";
 
 const START = papers.findIndex((p) => p.id === "paleblue");
@@ -17,9 +17,58 @@ const sparks = [
   { y: "86%", d: "70ms", s: "13px" },
 ];
 
+// Measured from the images: `hook` is the inside top of the hook, where it rests on the rail,
+// and `tip` the corner that holds the hook's tip, as % of the image. `place` puts that point
+// on the rail; it works at every width because the stage keeps a fixed ratio.
+const hangers = [
+  {
+    src: "/assets/3d/hoodie-blue.webp",
+    width: 1385,
+    height: 1495,
+    place: "top-[6%] left-[1%] w-[30%] sm:left-[20%] sm:w-[16%]",
+    sizes: "(min-width: 640px) 16vw, 30vw",
+    hook: "52% 4.6%",
+    tip: { x: 52, y: 11 },
+    delay: "0s",
+  },
+  {
+    src: "/assets/3d/mascot.webp",
+    width: 1638,
+    height: 1395,
+    place: "top-[5.5%] right-[2%] w-[24%] sm:top-[5.3%] sm:right-[20%] sm:w-[13%]",
+    sizes: "(min-width: 640px) 13vw, 24vw",
+    hook: "48% 10.5%",
+    tip: { x: 48, y: 26 },
+    delay: "-2s",
+  },
+];
+
+function Hanger({ src, width, height, place, sizes, hook, tip, delay, front }: (typeof hangers)[number] & { front?: boolean }) {
+  return (
+    <div className={`absolute ${place}`}>
+      <div className="sway" style={{ transformOrigin: hook, animationDelay: delay }}>
+        <Image
+          unoptimized
+          src={src}
+          alt=""
+          width={width}
+          height={height}
+          sizes={sizes}
+          className={`h-auto w-full ${front ? "" : "drop-shadow-[0_18px_18px_color-mix(in_srgb,var(--t-color-ink)_18%,transparent)]"}`}
+          style={
+            front
+              ? { clipPath: `polygon(${tip.x}% 0, 100% 0, 100% 100%, 0 100%, 0 ${tip.y}%, ${tip.x}% ${tip.y}%)` }
+              : undefined
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
 // The jeans are one transparent file drawn over both states, so they can't change between them.
 function Jeans({ sizes }: { sizes: string }) {
-  return <Image src="/assets/3d/jeans.webp" alt="" fill sizes={sizes} className="object-cover" />;
+  return <Image unoptimized src="/assets/3d/jeans.webp" alt="" fill sizes={sizes} className="object-cover" />;
 }
 
 export function StudioScene() {
@@ -50,8 +99,6 @@ export function StudioScene() {
   const rotateY = useTransform(mx, [-1, 1], [-11, 11]);
   const rotateX = useTransform(my, [-1, 1], [8, -8]);
   const nearX = useTransform(mx, [-1, 1], [-22, 22]);
-  const nearY = useTransform(my, [-1, 1], [-12, 12]);
-  const farX = useTransform(mx, [-1, 1], [10, -10]);
 
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse" || reduceMotion) return;
@@ -88,24 +135,15 @@ export function StudioScene() {
           <SweepPaper className="h-full w-full" />
         </div>
 
-        {/* blue hoodie and mascot hang from the roll, the pink hoodie drifts on the floor */}
-        <motion.div style={{ x: farX }} className="absolute top-[7%] left-[1%] w-[30%] sm:left-[19%] sm:w-[16%]">
-          <div className="sway drop-shadow-[0_18px_18px_color-mix(in_srgb,var(--t-color-ink)_18%,transparent)]">
-            <Image src="/assets/3d/hoodie-blue.webp" alt="" width={692} height={747} sizes="(min-width: 640px) 16vw, 30vw" className="h-auto w-full" />
-          </div>
-        </motion.div>
-        <motion.div style={{ x: farX }} className="absolute top-[7%] right-[2%] w-[24%] sm:right-[20%] sm:w-[13%]">
-          <div className="sway [animation-delay:-2s]">
-            <Image src="/assets/3d/mascot.webp" alt="" width={820} height={698} sizes="(min-width: 640px) 13vw, 24vw" className="h-auto w-full" />
-          </div>
-        </motion.div>
-        <motion.div style={{ x: nearX, y: nearY }} className="absolute bottom-[9%] left-[7%] hidden w-[11%] sm:block">
-          <div className="float [animation-delay:-3s] drop-shadow-[0_16px_14px_color-mix(in_srgb,var(--t-color-ink)_22%,transparent)]">
-            <Image src="/assets/3d/hoodie-pink.webp" alt="" width={241} height={217} sizes="11vw" className="h-auto w-full" />
-          </div>
-        </motion.div>
-
+        {/* Each hanger is drawn twice, so the rail threads through its hook: the whole image
+            behind the rail, then a copy in front with the hook's tip cut away. */}
+        {hangers.map((h) => (
+          <Hanger key={h.src} {...h} />
+        ))}
         <SweepRoll className="absolute inset-0 h-full w-full" />
+        {hangers.map((h) => (
+          <Hanger key={h.src} {...h} front />
+        ))}
 
         <div className="absolute inset-x-0 top-[14%] bottom-[5%] [perspective:1100px] sm:top-[13%]">
           <div className="absolute bottom-[-1%] left-1/2 h-[5%] w-[34%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--t-color-ink)_30%,transparent),transparent)] sm:w-[22%]" />
@@ -115,7 +153,7 @@ export function StudioScene() {
           >
             <div className="float relative h-full w-full drop-shadow-[0_26px_30px_color-mix(in_srgb,var(--t-color-ink)_28%,transparent)]">
               <div className="absolute top-[2.8%] left-[8.6%] h-[93.1%] w-[83%] overflow-hidden rounded-[10%/5.8%] bg-line [container-type:inline-size]">
-                <Image src="/assets/3d/before.webp" alt="" fill priority sizes="(min-width: 640px) 24vw, 46vw" className="object-cover" />
+                <Image unoptimized src="/assets/3d/before.webp" alt="" fill priority sizes="(min-width: 640px) 24vw, 46vw" className="object-cover" />
                 <div className="demo-after absolute inset-0" onAnimationIteration={(e) => {
                   if (e.animationName === "demo-after" && !pinned) setIndex((i) => (i + 1) % papers.length);
                 }}>
@@ -136,7 +174,7 @@ export function StudioScene() {
                   />
                 ))}
               </div>
-              <Image src="/assets/3d/phone.webp" alt="" fill priority sizes="(min-width: 640px) 29vw, 56vw" className="pointer-events-none object-contain" />
+              <Image unoptimized src="/assets/3d/phone.webp" alt="" fill priority sizes="(min-width: 640px) 29vw, 56vw" className="pointer-events-none object-contain" />
 
               <div className="demo-card absolute top-[34%] left-1/2 w-[50%] rounded-md sm:top-[22%] sm:w-[68%] bg-bg p-[3%] shadow-float">
                 <div className="relative aspect-[9/14] overflow-hidden rounded-sm">

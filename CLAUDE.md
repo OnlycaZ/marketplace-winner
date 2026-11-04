@@ -79,7 +79,10 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
 - Ilustrații 3D de tip cartoon (plastilină moale), într-un singur stil, ca
   imagini WebP transparente în `public/assets/3d/`. Fundalurile din ele sunt
   hârtie de studio, nu lemn sau decoruri (produsul rămâne hârtie colorată).
-  Hero fără cer și nori (prea aproape de Rewinder). Ele explică ideea (studio,
+  Hero: cerul cu haine pe nori (alegerea utilizatorului, 2026-11-04). Pe site
+  folosim doar culorile care merg cu albastru/alb (bleu, roz pudrat, galben-unt,
+  cărbune); teracota și salvia rămân în tokens, dar nu apar. Fiecare card are
+  designul lui, pe paleta albastru/alb. Ele explică ideea (studio,
   lot, verificare, export). NU se prefac a fi rezultate reale ale produsului:
   unde trebuie arătată haina reală sau un înainte/după real, folosești poze
   reale sau locuri goale marcate clar. Într-o animație înainte/după, haina e

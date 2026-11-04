@@ -66,7 +66,7 @@ export function Waitlist() {
             state.kind === "demo" ? "mascot-happy" : invalid || state.kind === "failed" ? "mascot-sad" : ""
           }`}
         >
-          <Image src="/assets/3d/mascot.webp" alt="" width={820} height={698} sizes="112px" className="h-auto w-full" />
+          <Image unoptimized src="/assets/3d/mascot.webp" alt="" width={1638} height={1395} sizes="112px" className="h-auto w-full" />
         </div>
         <h2
           id="waitlist-title"

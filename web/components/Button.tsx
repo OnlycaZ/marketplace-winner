@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-type Variant = "primary" | "outline" | "inverse";
+type Variant = "primary" | "outline" | "inverse" | "outlineLight";
 
 const base =
   "inline-flex min-h-12 items-center justify-center gap-2 rounded-pill px-6 font-semibold whitespace-nowrap " +
@@ -11,6 +11,7 @@ const variants: Record<Variant, string> = {
   primary: "bg-primary text-on-primary hover:bg-primary-hover",
   outline: "border-[1.5px] border-ink text-ink hover:bg-surface",
   inverse: "bg-bg text-ink hover:bg-surface",
+  outlineLight: "border-[1.5px] border-bg text-bg hover:bg-bg/15",
 };
 
 export function buttonClass(variant: Variant = "primary", extra = "") {

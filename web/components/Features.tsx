@@ -18,16 +18,18 @@ export function Features() {
       >
         The garment stays. The background changes.
       </h2>
-      <div className="mt-12 grid gap-4 lg:grid-cols-2 lg:gap-5">
+      <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:gap-5">
         <FeatureCard
-          tone="paleblue"
+          tone="surface"
+          className="lg:col-span-7"
           title="The garment stays untouched"
           text="We cut out the garment and only change what’s behind it. Drag the line to compare."
         >
           <BeforeAfter />
         </FeatureCard>
         <FeatureCard
-          tone="butter"
+          tone="sky"
+          className="lg:col-span-5"
           title="Whole batches at once"
           text="Drop in every photo from today’s shoot. They all get the same backdrop."
           onPointerEnter={() => setStackHover(true)}
@@ -36,7 +38,8 @@ export function Features() {
           <PhotoStack fanned={stackHover} />
         </FeatureCard>
         <FeatureCard
-          tone="sage"
+          tone="paper"
+          className="lg:col-span-5"
           title="You approve every photo"
           text="Nothing is final until you say so. Approve the good ones, redo the rest."
           bleed={false}
@@ -44,7 +47,8 @@ export function Features() {
           <ReviewScreen />
         </FeatureCard>
         <FeatureCard
-          tone="powder"
+          tone="ink"
+          className="lg:col-span-7"
           title="Ready for any marketplace"
           text="Download each photo square or portrait, sized for the listing."
           bleed={false}

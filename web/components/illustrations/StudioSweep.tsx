@@ -4,7 +4,7 @@
 // Colours come only from tokens.
 
 const VIEWBOX = "0 0 1200 720";
-const PAPER = "M250 70 H950 V420 C950 560 1010 620 1200 650 V720 H0 V650 C190 620 250 560 250 420 Z";
+const PAPER = "M250 59 H950 V420 C950 560 1010 620 1200 650 V720 H0 V650 C190 620 250 560 250 420 Z";
 
 type LayerProps = { className?: string };
 
@@ -48,7 +48,7 @@ export function SweepPaper({ className }: LayerProps) {
   );
 }
 
-// The roll, shaded like a soft cylinder to match the 3D objects hanging from it.
+// The rail, shaded like a soft cylinder. It is thin enough to fit inside the hangers' hooks.
 export function SweepRoll({ className }: LayerProps) {
   return (
     <svg viewBox={VIEWBOX} preserveAspectRatio="xMidYMax slice" className={className} aria-hidden="true">
@@ -59,8 +59,7 @@ export function SweepRoll({ className }: LayerProps) {
           <stop offset="1" stopColor="var(--t-color-ink)" />
         </linearGradient>
       </defs>
-      <rect x="226" y="50" width="748" height="30" rx="15" transform="translate(0 7)" style={{ fill: "var(--t-color-ink)", opacity: 0.12 }} />
-      <rect x="226" y="44" width="748" height="30" rx="15" fill="url(#sweep-roll)" />
+      <rect x="226" y="52" width="748" height="14" rx="7" fill="url(#sweep-roll)" />
     </svg>
   );
 }

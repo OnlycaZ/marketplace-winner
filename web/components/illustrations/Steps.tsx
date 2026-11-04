@@ -4,7 +4,6 @@
 // the small movement is the explanation: photos drop in, paper pulls down, the tick lands.
 import { motion, MotionConfig } from "motion/react";
 import type { ReactNode } from "react";
-import type { PaperId } from "@/lib/tokens";
 import { Badge3D, Print3D } from "./Print3D";
 import { Tilt } from "./Tilt";
 
@@ -53,12 +52,12 @@ export function StepUpload() {
 
 // 2. Pick a backdrop: paper rolls on a rail, and one pulls down.
 export function StepBackdrop() {
-  const rolls: { id: PaperId; pulled?: boolean }[] = [
-    { id: "terracotta" },
-    { id: "sage" },
-    { id: "butter", pulled: true },
-    { id: "powder" },
-    { id: "charcoal" },
+  const rolls: { id: string; color: string; pulled?: boolean }[] = [
+    { id: "paleblue", color: "var(--t-paper-paleblue)" },
+    { id: "powder", color: "var(--t-paper-powder)" },
+    { id: "cobalt", color: "var(--t-color-primary)", pulled: true },
+    { id: "butter", color: "var(--t-paper-butter)" },
+    { id: "ink", color: "var(--t-color-ink)" },
   ];
   return (
     <Stage>
@@ -73,7 +72,7 @@ export function StepBackdrop() {
             transition={{ ...bounce, delay: r.pulled ? 0.25 : 0 }}
             className={`w-[17%] origin-top rounded-b-sm shadow-clay ${r.pulled ? "h-[150px]" : "h-[84px]"} max-[1100px]:h-auto max-[1100px]:aspect-[1/2]`}
             style={{
-              backgroundColor: `var(--t-paper-${r.id})`,
+              backgroundColor: r.color,
               backgroundImage:
                 "linear-gradient(to right, color-mix(in srgb, var(--t-color-ink) 10%, transparent), transparent 30%, transparent 70%, color-mix(in srgb, var(--t-color-ink) 10%, transparent))",
             }}
@@ -95,7 +94,7 @@ export function StepCheck() {
         transition={bounce}
         className="absolute top-[6%] left-[32%] w-[36%]"
       >
-        <Print3D paper="butter" garment="hoodie-blue" className="aspect-[4/5]" sizes="150px" />
+        <Print3D paper="paleblue" garment="hoodie-blue" className="aspect-[4/5]" sizes="150px" />
       </motion.div>
       <motion.span
         initial={{ scale: 0.3, opacity: 0 }}

@@ -8,11 +8,11 @@ import { ease, type PaperId } from "@/lib/tokens";
 import { Print3D, type Garment } from "./Print3D";
 
 const prints: { paper: PaperId; garment: Garment; rest: Pose; fan: Pose }[] = [
-  { paper: "charcoal", garment: "hoodie-blue", rest: { x: "0%", y: 8, rotate: -5 }, fan: { x: "-92%", y: 30, rotate: -14 } },
-  { paper: "terracotta", garment: "jeans", rest: { x: "0%", y: 6, rotate: -2 }, fan: { x: "-46%", y: 8, rotate: -7 } },
-  { paper: "sage", garment: "hoodie-pink", rest: { x: "0%", y: 4, rotate: 1 }, fan: { x: "0%", y: 0, rotate: 0 } },
-  { paper: "paleblue", garment: "jeans", rest: { x: "0%", y: 2, rotate: 3 }, fan: { x: "46%", y: 8, rotate: 7 } },
-  { paper: "powder", garment: "hoodie-blue", rest: { x: "0%", y: 0, rotate: 5 }, fan: { x: "92%", y: 30, rotate: 14 } },
+  { paper: "butter", garment: "jeans", rest: { x: "-30%", y: 12, rotate: -9 }, fan: { x: "-92%", y: 30, rotate: -14 } },
+  { paper: "powder", garment: "hoodie-blue", rest: { x: "-15%", y: 4, rotate: -4 }, fan: { x: "-46%", y: 8, rotate: -7 } },
+  { paper: "paleblue", garment: "jeans", rest: { x: "0%", y: 0, rotate: 0 }, fan: { x: "0%", y: 0, rotate: 0 } },
+  { paper: "butter", garment: "hoodie-blue", rest: { x: "15%", y: 4, rotate: 4 }, fan: { x: "46%", y: 8, rotate: 7 } },
+  { paper: "paleblue", garment: "hoodie-blue", rest: { x: "30%", y: 12, rotate: 9 }, fan: { x: "92%", y: 30, rotate: 14 } },
 ];
 
 type Pose = { x: string; y: number; rotate: number };

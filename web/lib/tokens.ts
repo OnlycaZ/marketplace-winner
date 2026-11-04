@@ -11,6 +11,8 @@ export const color = {
   field: "#7d89a1",
   primary: "#1f44c8",
   primaryHover: "#1734a0",
+  // the top edge of the hero sky image, so the section and the image join invisibly
+  sky: "#0f5ce8",
   // darker than a typical red so it passes AA on the pale blue paper too (5.3:1)
   error: "#9b1c15",
   onPrimary: "#ffffff",
@@ -27,6 +29,9 @@ export const papers = [
 ] as const;
 
 export type PaperId = (typeof papers)[number]["id"];
+
+// The papers shown on the site: the ones that sit well with the blue and white palette.
+export const sitePapers = papers.filter((p) => ["paleblue", "powder", "butter", "charcoal"].includes(p.id));
 
 export const text = {
   display: "clamp(3.25rem, 2.1rem + 4.9vw, 7.5rem)",

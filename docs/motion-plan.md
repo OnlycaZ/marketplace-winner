@@ -56,8 +56,10 @@ These replace #2 (backdrop cycle) and extend #5. The earlier "Cut" list still ap
 | **Hero demo loop.** Phone shows the original photo, the paper wipes in behind the jeans, the finished print pops out with a tick. Each loop uses the next paper. | It is the product, shown in 8 seconds | Runs while visible; Pause button | 8s loop; wipe 1.1s `ease-in-out`; print spring-like overshoot | No loop: finished state, static; no Pause button |
 | **Phone tilt and parallax** following the cursor | Gives the 3D objects depth and rewards exploring | Mouse only | Motion spring, no fixed duration | Off |
 | **Idle float and sway** of phone, hoodies, mascot | Makes the studio feel alive; slow enough to ignore | Runs with the demo, same Pause | 6s `ease-in-out` | Off |
-| **Menu: sliding highlight** between links, and current section marked | Shows where you are and where you're going | On hover and while scrolling | Spring ~350ms, bounce 0.15 | Instant |
-| **Menu: reading progress line** | Orientation on a long page | While scrolling | Tied to scroll | Stays, it isn't movement of its own |
+| **Menu: sliding white highlight** between links, and current section marked | Shows where you are and where you're going | On hover and while scrolling | Spring ~400ms, bounce 0.22 | Instant |
+| **Menu: progress ring** around the mascot | Orientation on a long page | While scrolling | Tied to scroll | Stays, it isn't movement of its own |
+| **Menu folds** to name and button when reading down; opens on scroll up, hover or keyboard focus | Gives the page more room, keeps the action in reach | While scrolling | 300ms `ease-out` | Instant |
+| **Menu button leans** toward the cursor | Invites the one action the page wants | Mouse only | Motion spring | Off |
 | **Mascot swing** in the menu, on hover and when the section changes | Small feedback with personality | Occasional | 700ms `ease-in-out` | Off |
 | **Phone menu** opening | Shows where the panel comes from | Occasional | 180ms `ease-out`, scale from 0.96 | Opacity only |
 | **Review card:** Approve puts a tick on the print, Redo flips it onto the next paper | Lets people try the approval step instead of reading about it | When clicked | spring 400–500ms | Opacity only |

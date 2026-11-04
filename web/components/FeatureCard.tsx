@@ -1,25 +1,23 @@
 import type { ReactNode } from "react";
-import type { PaperId } from "@/lib/tokens";
 
-const tones: Record<PaperId, string> = {
-  terracotta: "bg-paper-terracotta text-bg",
-  sage: "bg-paper-sage text-ink",
-  butter: "bg-paper-butter text-ink",
-  paleblue: "bg-paper-paleblue text-ink",
-  powder: "bg-paper-powder text-ink",
-  charcoal: "bg-paper-charcoal text-bg",
+// Each card has its own surface, all from the blue and white palette.
+const tones = {
+  surface: "bg-surface text-ink",
+  sky: "bg-primary text-on-primary",
+  paper: "bg-paper-paleblue text-ink",
+  ink: "bg-ink text-bg",
 };
 
 type Props = {
   title: string;
   text: string;
-  tone: PaperId;
+  tone: keyof typeof tones;
   // Pictures run off the card's bottom edge; anything with buttons stays fully inside.
   bleed?: boolean;
   children: ReactNode;
 } & React.HTMLAttributes<HTMLElement>;
 
-// A card on studio paper, with its picture at the bottom.
+// A feature card, with its picture at the bottom.
 export function FeatureCard({ title, text, tone, bleed = true, children, className = "", ...rest }: Props) {
   return (
     <article className={`flex flex-col overflow-hidden rounded-lg ${tones[tone]} ${className}`} {...rest}>

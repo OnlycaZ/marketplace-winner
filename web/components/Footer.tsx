@@ -38,7 +38,7 @@ export function Footer() {
           ))}
         </nav>
       </div>
-      <div className="relative overflow-hidden bg-paper-butter">
+      <div className="relative overflow-hidden bg-paper-paleblue">
         <p className="mx-auto max-w-[1240px] px-4 pt-6 text-small text-ink">
           © 2026 {site.name}
         </p>

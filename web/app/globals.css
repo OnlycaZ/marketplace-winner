@@ -17,6 +17,7 @@
   --color-field: var(--t-color-field);
   --color-primary: var(--t-color-primary);
   --color-primary-hover: var(--t-color-primary-hover);
+  --color-sky: var(--t-color-sky);
   --color-error: var(--t-color-error);
   --color-on-primary: var(--t-color-on-primary);
   --color-paper-terracotta: var(--t-paper-terracotta);
@@ -286,10 +287,10 @@ input {
 
 @keyframes sway {
   from {
-    transform: rotate(-2deg);
+    transform: rotate(-1.5deg);
   }
   to {
-    transform: rotate(2deg);
+    transform: rotate(1.5deg);
   }
 }
 

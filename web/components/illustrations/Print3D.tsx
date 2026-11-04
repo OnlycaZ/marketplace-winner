@@ -8,7 +8,6 @@ import type { PaperId } from "@/lib/tokens";
 export const garments = {
   jeans: "/assets/3d/jeans-cut.webp",
   "hoodie-blue": "/assets/3d/hoodie-blue.webp",
-  "hoodie-pink": "/assets/3d/hoodie-pink.webp",
 } as const;
 
 export type Garment = keyof typeof garments;
@@ -32,6 +31,7 @@ export function Print3D({ paper, garment, className = "", sizes = "220px", child
         {/* light from above, a little shade where the paper curves into the floor */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-color-bg)_30%,transparent),transparent_50%,color-mix(in_srgb,var(--t-color-ink)_10%,transparent))]" />
         <Image
+          unoptimized
           src={garments[garment]}
           alt=""
           fill

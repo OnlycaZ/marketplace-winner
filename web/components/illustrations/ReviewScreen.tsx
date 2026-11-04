@@ -4,14 +4,14 @@
 // Approve puts the tick on a print; Redo swaps its backdrop and clears the tick.
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useState } from "react";
-import { papers, type PaperId } from "@/lib/tokens";
+import { sitePapers as papers, type PaperId } from "@/lib/tokens";
 import { Badge3D, Print3D, type Garment } from "./Print3D";
 
 type Item = { label: string; garment: Garment; paper: PaperId; approved: boolean; version: number };
 
 const start: Item[] = [
   { label: "jeans", garment: "jeans", paper: "paleblue", approved: true, version: 0 },
-  { label: "hoodie", garment: "hoodie-pink", paper: "terracotta", approved: false, version: 0 },
+  { label: "hoodie", garment: "hoodie-blue", paper: "powder", approved: false, version: 0 },
 ];
 
 const pill =

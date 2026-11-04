@@ -59,7 +59,7 @@ export function HowItWorks() {
 export function ComingLater() {
   return (
     <section aria-labelledby="later-title" className="mx-auto mt-24 max-w-[1240px] px-4">
-      <div className="grid items-center gap-8 overflow-hidden rounded-lg bg-paper-charcoal px-7 py-10 text-bg sm:px-12 md:grid-cols-[1.2fr_1fr]">
+      <div className="grid items-center gap-8 overflow-hidden rounded-lg bg-ink px-7 py-10 text-bg sm:px-12 md:grid-cols-[1.2fr_1fr]">
         <div>
           <h2 id="later-title" className="font-display text-h3 leading-heading font-bold tracking-tight [font-stretch:88%]">
             In progress: listing text from your photos
