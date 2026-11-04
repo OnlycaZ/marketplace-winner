@@ -24,7 +24,7 @@ export function ExportFormats() {
               animate={{ width: format.width, aspectRatio: format.ratio }}
               transition={{ type: "spring", duration: 0.45, bounce: 0.2 }}
             >
-              <Print3D paper="paleblue" garment="hoodie-blue" className="h-full w-full" sizes="240px" />
+              <Print3D backdrop="oak" garment="hoodie-blue" className="h-full w-full" sizes="240px" />
             </motion.div>
           </div>
         </Tilt>

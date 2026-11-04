@@ -2,5 +2,5 @@
 export const site = {
   name: "Marketplace Winner",
   description:
-    "Swap the background of your clothing photos for studio paper backdrops, in batches. The garment stays exactly as you shot it.",
+    "Swap the background of your clothing photos for natural backgrounds, in batches. The garment stays exactly as you shot it.",
 } as const;

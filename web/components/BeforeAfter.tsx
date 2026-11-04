@@ -6,13 +6,13 @@
 import Image from "next/image";
 import { animate, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { ease, sitePapers } from "@/lib/tokens";
+import { ease } from "@/lib/tokens";
 import { FeatureCard } from "./FeatureCard";
 
 const SIZES = "(min-width: 1024px) 40vw, 90vw";
 const sticker = "absolute top-4 rounded-pill bg-ink/85 px-4 py-1.5 text-small font-semibold text-bg backdrop-blur-sm";
 
-function Slider({ paper }: { paper: string }) {
+function Slider() {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
   const touched = useRef(false);
@@ -43,11 +43,7 @@ function Slider({ paper }: { paper: string }) {
         <span className={`${sticker} left-4`}>Before</span>
       </div>
       <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
-        <div className="absolute inset-0 transition-colors duration-(--t-dur-paper)" style={{ backgroundColor: paper }} />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-color-bg)_32%,transparent),transparent_45%,color-mix(in_srgb,var(--t-color-ink)_9%,transparent))]" />
-        <div className="absolute inset-0 translate-x-[1.5%] translate-y-[1.5%] opacity-30 blur-[8px] brightness-0">
-          <Image unoptimized src="/assets/3d/jeans.webp" alt="" fill sizes={SIZES} className="object-cover" />
-        </div>
+        <Image unoptimized src="/assets/3d/wood.webp" alt="" fill sizes={SIZES} className="object-cover" />
         <span className={`${sticker} right-4`}>After</span>
       </div>
       {/* The garment is one file on top of both sides: it can't change as the line moves. */}
@@ -90,40 +86,15 @@ function Slider({ paper }: { paper: string }) {
 }
 
 export function BeforeAfterCard() {
-  const [paper, setPaper] = useState(sitePapers[0]);
-
   return (
     <FeatureCard
       tone="sky"
       split
       className="lg:col-span-12"
       title="The garment stays untouched"
-      text="We cut out the garment and only change what’s behind it. Drag the line, then try another paper."
-      aside={
-        <fieldset className="mt-7 flex flex-wrap gap-3">
-          <legend className="sr-only">Backdrop colour</legend>
-          {sitePapers.map((p) => (
-            <label key={p.id} className="cursor-pointer" title={p.label}>
-              <input
-                type="radio"
-                name="compare-backdrop"
-                value={p.id}
-                checked={p.id === paper.id}
-                onChange={() => setPaper(p)}
-                aria-label={p.label}
-                className="peer sr-only"
-              />
-              <span
-                aria-hidden="true"
-                className="block size-12 rounded-pill shadow-clay ring-offset-3 ring-offset-primary transition-transform duration-(--t-dur-hover) ease-standard peer-checked:ring-3 peer-checked:ring-bg peer-focus-visible:outline-2 peer-focus-visible:outline-offset-6 peer-focus-visible:outline-bg hover:scale-105 active:scale-[0.97] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
-                style={{ background: p.hex }}
-              />
-            </label>
-          ))}
-        </fieldset>
-      }
+      text="We cut out the garment and only change what’s behind it. Drag the line to compare."
     >
-      <Slider paper={paper.hex} />
+      <Slider />
     </FeatureCard>
   );
 }

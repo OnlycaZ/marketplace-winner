@@ -19,7 +19,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-[1240px] flex-col gap-10 px-4 pb-14 sm:flex-row sm:justify-between">
         <div>
           <p className="font-display text-h3 font-extrabold tracking-tight [font-stretch:88%]">{site.name}</p>
-          <p className="mt-2 max-w-[34ch] text-ink-2">Studio paper backdrops for the clothes you sell.</p>
+          <p className="mt-2 max-w-[34ch] text-ink-2">Natural backgrounds for the clothes you sell.</p>
         </div>
         <nav aria-label="Footer" className="flex gap-16">
           {columns.map((c) => (

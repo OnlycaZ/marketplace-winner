@@ -2,7 +2,7 @@
 
 ## Proiectul
 Tool pentru oameni care vând haine second-hand pe marketplace-uri: înlocuiește
-fundalul pozelor de produs cu fundaluri de studio (hârtie colorată), în lot.
+fundalul pozelor de produs cu fundaluri naturale, în lot.
 Utilizatorul verifică fiecare poză, descarcă și își urcă singur anunțurile.
 Nu automatizăm urcarea pe nicio platformă.
 
@@ -39,7 +39,7 @@ rezultat. Dacă o abordare încalcă regula, o semnalezi înainte să scrii cod.
   animație) stau într-un singur fișier, folosibil din CSS și din Motion;
   componentele folosesc doar tokens.
 - Ilustrațiile sunt imagini 3D în `public/assets/3d/`, afișate prin next/image;
-  ce desenăm în cod (hârtia, rola) stă în `components/illustrations/`, cu culori
+  ce desenăm în cod (peretele, bara) stă în `components/illustrations/`, cu culori
   doar din tokens.
 - Publicare pe Vercel.
 - Nu adăuga biblioteci noi fără să explici de ce și fără aprobare.
@@ -72,13 +72,12 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
 - Fără texte mici decorative: nicio etichetă mică deasupra titlurilor, nicio
   linie de încredere cu puncte sub butoane (decizia utilizatorului, 2026-11-03:
   par generate de AI).
-- Numele uriaș în footer, tăiat de marginea paginii, pe fond în culoarea hârtiei.
-- Lumea vizuală proprie: studioul foto. Culorile de hârtie (teracotă, salvie,
-  galben-unt, bleu pal, roz pudrat, cărbune) apar în scena din hero, în
-  ilustrații, în carduri și în footer, cu un grain foarte discret.
+- Numele uriaș în footer, tăiat de marginea paginii, pe fond bleu pal.
+- Lumea vizuală proprie: haine pe fundaluri naturale. Culorile pastelate (bleu pal,
+  roz pudrat, galben-unt, cărbune) apar în ilustrații, în carduri și în footer.
 - Ilustrații 3D de tip cartoon (plastilină moale), într-un singur stil, ca
   imagini WebP transparente în `public/assets/3d/`. Fundalurile din ele sunt
-  hârtie de studio, nu lemn sau decoruri (produsul rămâne hârtie colorată).
+  naturale, de exemplu podeaua de lemn (decizia utilizatorului, 2026-11-05).
   Hero: cerul cu haine pe nori (alegerea utilizatorului, 2026-11-04). Pe site
   folosim doar culorile care merg cu albastru/alb (bleu, roz pudrat, galben-unt,
   cărbune); teracota și salvia rămân în tokens, dar nu apar. Fiecare card are
@@ -94,7 +93,8 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
   sau nume de platforme, mascote sau ilustrații copiate.
 - Accesibil: contrast WCAG AA, focus vizibil, navigare din tastatură, alt text,
   prefers-reduced-motion respectat peste tot; orice mișcare automată de peste
-  5 secunde are buton de pauză.
+  5 secunde are buton de pauză (la scena din hero apare doar la focus din tastatură,
+  decizia utilizatorului, 2026-11-05).
 
 ## Onestitate în produs și pe site
 - Nu inventa prețuri, limite sau parametri de API. Verifică în documentația
@@ -126,7 +126,7 @@ elementele (logo-uri, mascote, personaje, ilustrații, texte, culori exacte):
   - `public/assets/3d/`: imaginile 3D decupate (haine, mascotă, ramă de telefon)
 - `docs/`: `decisions.md` (data, decizia, motivul, alternativa respinsă),
   `motion-plan.md`, `design-brief/` (pagina de test din Faza 1b), `pricing.md`,
-  `platform-terms.md`
+  `platform-terms.md`, `roadmap.md`
 - `.claude/launch.json`: serverele locale (`web` pe portul 3000, `design-brief` pe 4310)
 - `experiments/bg-test/`: testul pe ~30 de poze (scripturi, rezultate, scoruri)
 - `_archive/`: încercări anterioare, doar pentru referință

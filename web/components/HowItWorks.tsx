@@ -8,8 +8,8 @@ const steps = [
     Illustration: StepUpload,
   },
   {
-    title: "Pick a backdrop",
-    text: "Choose a paper colour. Every photo in the batch gets it.",
+    title: "Pick a background",
+    text: "Choose a natural background. Every photo in the batch gets it.",
     Illustration: StepBackdrop,
   },
   {

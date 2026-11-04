@@ -33,11 +33,11 @@ export function Hero() {
               Real clothes.
             </span>
             <span className="enter block" style={{ "--i": 1 } as React.CSSProperties}>
-              Studio <em className="font-[760] italic">backgrounds.</em>
+              Natural <em className="font-[760] italic">backgrounds.</em>
             </span>
           </h1>
           <p className="enter mx-auto mt-7 max-w-[54ch] text-lead" style={{ "--i": 2 } as React.CSSProperties}>
-            Upload a batch of photos, pick a paper backdrop, check every result and download listing-ready images. The
+            Upload a batch of photos, pick a natural background, check every result and download listing-ready images. The
             garment stays exactly as you shot it.
           </p>
           <div

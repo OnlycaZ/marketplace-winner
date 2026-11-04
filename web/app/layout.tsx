@@ -24,7 +24,7 @@ const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${site.name}: studio backgrounds for clothing photos`,
+  title: `${site.name}: natural backgrounds for clothing photos`,
   description: site.description,
   openGraph: {
     title: `${site.name}: real clothes, studio backgrounds`,

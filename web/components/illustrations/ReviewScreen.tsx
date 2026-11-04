@@ -1,17 +1,17 @@
 "use client";
 
 // "You approve every photo": a small working review screen.
-// Approve puts the tick on a print; Redo swaps its backdrop and clears the tick.
+// Approve puts the tick on a print; Redo swaps its background and clears the tick.
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useState } from "react";
-import { sitePapers as papers, type PaperId } from "@/lib/tokens";
+import { woods, type WoodId } from "@/lib/tokens";
 import { Badge3D, Print3D, type Garment } from "./Print3D";
 
-type Item = { label: string; garment: Garment; paper: PaperId; approved: boolean; version: number };
+type Item = { label: string; garment: Garment; backdrop: WoodId; approved: boolean; version: number };
 
 const start: Item[] = [
-  { label: "jeans", garment: "jeans", paper: "paleblue", approved: true, version: 0 },
-  { label: "hoodie", garment: "hoodie-blue", paper: "powder", approved: false, version: 0 },
+  { label: "jeans", garment: "jeans", backdrop: "oak", approved: true, version: 0 },
+  { label: "hoodie", garment: "hoodie-blue", backdrop: "ash", approved: false, version: 0 },
 ];
 
 const pill =
@@ -24,8 +24,8 @@ export function ReviewScreen() {
     setItems((all) => all.map((it, n) => (n === i ? { ...it, ...change(it) } : it)));
 
   const redo = (it: Item) => {
-    const next = (papers.findIndex((p) => p.id === it.paper) + 1) % papers.length;
-    return { paper: papers[next].id, approved: false, version: it.version + 1 };
+    const next = (woods.findIndex((w) => w.id === it.backdrop) + 1) % woods.length;
+    return { backdrop: woods[next].id, approved: false, version: it.version + 1 };
   };
 
   return (
@@ -40,7 +40,7 @@ export function ReviewScreen() {
                 animate={{ rotateY: 0, opacity: 1 }}
                 transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
               >
-                <Print3D paper={it.paper} garment={it.garment} className="aspect-[4/5]" sizes="190px" />
+                <Print3D backdrop={it.backdrop} garment={it.garment} className="aspect-[4/5]" sizes="190px" />
               </motion.div>
               <AnimatePresence>
                 {it.approved && (
@@ -68,7 +68,7 @@ export function ReviewScreen() {
               </button>
               <button
                 type="button"
-                aria-label={`Redo the ${it.label} photo with the next backdrop`}
+                aria-label={`Redo the ${it.label} photo with the next background`}
                 onClick={() => update(i, redo)}
                 className={`${pill} bg-surface text-ink hover:bg-line`}
               >

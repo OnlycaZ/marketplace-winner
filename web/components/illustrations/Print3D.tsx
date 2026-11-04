@@ -1,9 +1,9 @@
-// Soft 3D building blocks: a photo print on studio paper and a round badge.
-// Garments are cut-out images; the paper, frame and shading come from tokens,
-// so a print can take any backdrop. These are illustrations, never real results.
+// Soft 3D building blocks: a photo print on a wood background and a round badge.
+// Garments are cut-out images drawn over the wood, so a tone change never touches them.
+// These are illustrations, never real results.
 import Image from "next/image";
 import type { ReactNode } from "react";
-import type { PaperId } from "@/lib/tokens";
+import { woods, type WoodId } from "@/lib/tokens";
 
 export const garments = {
   jeans: "/assets/3d/jeans-cut.webp",
@@ -13,31 +13,39 @@ export const garments = {
 export type Garment = keyof typeof garments;
 
 type PrintProps = {
-  paper: PaperId | "plain";
-  garment: Garment;
+  backdrop: WoodId | "plain";
+  garment?: Garment;
   className?: string;
   sizes?: string;
   children?: ReactNode;
 };
 
-export function Print3D({ paper, garment, className = "", sizes = "220px", children }: PrintProps) {
-  const backdrop = paper === "plain" ? "var(--t-color-line)" : `var(--t-paper-${paper})`;
+export function Print3D({ backdrop, garment, className = "", sizes = "220px", children }: PrintProps) {
+  const wood = woods.find((w) => w.id === backdrop);
   return (
     <div className={`relative rounded-md bg-bg p-[6%] shadow-clay ${className}`}>
-      <div
-        className="relative h-full w-full overflow-hidden rounded-sm transition-colors duration-(--t-dur-paper)"
-        style={{ backgroundColor: backdrop }}
-      >
-        {/* light from above, a little shade where the paper curves into the floor */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-color-bg)_30%,transparent),transparent_50%,color-mix(in_srgb,var(--t-color-ink)_10%,transparent))]" />
-        <Image
-          unoptimized
-          src={garments[garment]}
-          alt=""
-          fill
-          sizes={sizes}
-          className="object-contain p-[12%] drop-shadow-[0_8px_8px_color-mix(in_srgb,var(--t-color-ink)_25%,transparent)]"
-        />
+      <div className="relative h-full w-full overflow-hidden rounded-sm bg-line">
+        {wood && (
+          <Image
+            unoptimized
+            src="/assets/3d/wood-tile.webp"
+            alt=""
+            fill
+            sizes={sizes}
+            className="object-cover"
+            style={{ objectPosition: wood.position, filter: wood.filter }}
+          />
+        )}
+        {garment && (
+          <Image
+            unoptimized
+            src={garments[garment]}
+            alt=""
+            fill
+            sizes={sizes}
+            className="object-contain p-[12%] drop-shadow-[0_8px_8px_color-mix(in_srgb,var(--t-color-ink)_25%,transparent)]"
+          />
+        )}
       </div>
       {children}
     </div>

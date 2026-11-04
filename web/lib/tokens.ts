@@ -18,7 +18,7 @@ export const color = {
   onPrimary: "#ffffff",
 } as const;
 
-// Studio papers. `text` says which text colour passes WCAG AA on that paper.
+// Soft palette colours. `text` says which text colour passes WCAG AA on that colour.
 export const papers = [
   { id: "terracotta", label: "Terracotta", hex: "#b9563f", text: "light" },
   { id: "sage", label: "Sage", hex: "#a9b89b", text: "dark" },
@@ -28,10 +28,15 @@ export const papers = [
   { id: "charcoal", label: "Charcoal", hex: "#34363b", text: "light" },
 ] as const;
 
-export type PaperId = (typeof papers)[number]["id"];
+// Wood backgrounds for the illustrations: one clean wood image, three crops and tones.
+// The filter applies to the wood only, never to a garment.
+export const woods = [
+  { id: "oak", position: "0% 50%", filter: "none" },
+  { id: "ash", position: "50% 50%", filter: "saturate(0.55) brightness(1.12)" },
+  { id: "walnut", position: "100% 50%", filter: "saturate(1.15) brightness(0.6)" },
+] as const;
 
-// The papers shown on the site: the ones that sit well with the blue and white palette.
-export const sitePapers = papers.filter((p) => ["paleblue", "powder", "butter", "charcoal"].includes(p.id));
+export type WoodId = (typeof woods)[number]["id"];
 
 export const text = {
   display: "clamp(3.25rem, 2.1rem + 4.9vw, 7.5rem)",
@@ -68,8 +73,6 @@ export const duration = {
   ui: 220,
   paper: 400,
   enter: 450,
-  unroll: 700,
-  cycleFade: 900,
   demoLoop: 8000,
   float: 6000,
   swing: 700,

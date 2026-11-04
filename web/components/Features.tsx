@@ -24,7 +24,7 @@ export function Features() {
           tone="surface"
           className="lg:col-span-7"
           title="Whole batches at once"
-          text="Drop in every photo from today’s shoot. They all get the same backdrop."
+          text="Drop in every photo from today’s shoot. They all get the same background."
           onPointerEnter={() => setStackHover(true)}
           onPointerLeave={() => setStackHover(false)}
         >

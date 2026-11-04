@@ -24,7 +24,7 @@ export default function OpengraphImage() {
         <div style={{ fontSize: 30, fontWeight: 700 }}>{site.name}</div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: 104, fontWeight: 800, lineHeight: 0.95, letterSpacing: -4 }}>
           <span>Real clothes.</span>
-          <span>Studio backgrounds.</span>
+          <span>Natural backgrounds.</span>
         </div>
         <div style={{ display: "flex", gap: 14 }}>
           {papers.map((p) => (

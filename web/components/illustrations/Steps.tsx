@@ -1,9 +1,10 @@
 "use client";
 
 // The three "How it works" steps. Each plays once when it scrolls into view, because
-// the small movement is the explanation: photos drop in, paper pulls down, the tick lands.
+// the small movement is the explanation: photos drop in, a background is picked, the tick lands.
 import { motion, MotionConfig } from "motion/react";
 import type { ReactNode } from "react";
+import type { WoodId } from "@/lib/tokens";
 import { Badge3D, Print3D } from "./Print3D";
 import { Tilt } from "./Tilt";
 
@@ -41,7 +42,7 @@ export function StepUpload() {
           className="absolute top-[6%] w-[26%]"
           style={{ left: d.left }}
         >
-          <Print3D paper="plain" garment="jeans" className="aspect-[4/5]" sizes="110px" />
+          <Print3D backdrop="plain" garment="jeans" className="aspect-[4/5]" sizes="110px" />
         </motion.div>
       ))}
       <div className="absolute inset-x-[12%] bottom-[8%] h-[36%] rounded-md bg-[linear-gradient(to_bottom,var(--t-paper-paleblue),color-mix(in_srgb,var(--t-paper-paleblue)_82%,var(--t-color-ink)))] shadow-clay" />
@@ -50,35 +51,36 @@ export function StepUpload() {
   );
 }
 
-// 2. Pick a backdrop: paper rolls on a rail, and one pulls down.
+// 2. Pick a background: three wood tones come up, and the middle one takes the garment.
 export function StepBackdrop() {
-  const rolls: { id: string; color: string; pulled?: boolean }[] = [
-    { id: "paleblue", color: "var(--t-paper-paleblue)" },
-    { id: "powder", color: "var(--t-paper-powder)" },
-    { id: "cobalt", color: "var(--t-color-primary)", pulled: true },
-    { id: "butter", color: "var(--t-paper-butter)" },
-    { id: "ink", color: "var(--t-color-ink)" },
+  const tiles: { id: WoodId; place: string; rotate: number; delay: number; picked?: boolean }[] = [
+    { id: "ash", place: "top-[20%] left-[7%] w-[29%]", rotate: -7, delay: 0 },
+    { id: "walnut", place: "top-[20%] right-[7%] w-[29%]", rotate: 7, delay: 0.08 },
+    { id: "oak", place: "top-[6%] left-[30%] w-[40%]", rotate: 0, delay: 0.22, picked: true },
   ];
   return (
     <Stage>
-      <div className="absolute inset-x-[8%] top-[8%] h-[7%] rounded-pill bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--t-paper-charcoal)_72%,var(--t-color-bg)),var(--t-paper-charcoal)_45%,var(--t-color-ink))] shadow-clay" />
-      <div className="absolute inset-x-[12%] top-[12%] flex justify-between">
-        {rolls.map((r) => (
-          <motion.div
-            key={r.id}
-            initial={{ scaleY: 0.45 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={inView}
-            transition={{ ...bounce, delay: r.pulled ? 0.25 : 0 }}
-            className={`w-[17%] origin-top rounded-b-sm shadow-clay ${r.pulled ? "h-[150px]" : "h-[84px]"} max-[1100px]:h-auto max-[1100px]:aspect-[1/2]`}
-            style={{
-              backgroundColor: r.color,
-              backgroundImage:
-                "linear-gradient(to right, color-mix(in srgb, var(--t-color-ink) 10%, transparent), transparent 30%, transparent 70%, color-mix(in srgb, var(--t-color-ink) 10%, transparent))",
-            }}
-          />
-        ))}
-      </div>
+      {tiles.map((t) => (
+        <motion.div
+          key={t.id}
+          initial={{ y: 36, opacity: 0, rotate: 0 }}
+          whileInView={{ y: 0, opacity: 1, rotate: t.rotate }}
+          viewport={inView}
+          transition={{ ...bounce, delay: t.delay }}
+          className={`absolute ${t.place}`}
+        >
+          <Print3D backdrop={t.id} garment={t.picked ? "jeans" : undefined} className="aspect-[4/5]" sizes="150px" />
+        </motion.div>
+      ))}
+      <motion.span
+        initial={{ scale: 0.3, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={inView}
+        transition={{ ...bounce, delay: 0.5 }}
+        className="absolute top-[1%] right-[25%] w-[13%]"
+      >
+        <Badge3D className="w-full" />
+      </motion.span>
     </Stage>
   );
 }
@@ -94,7 +96,7 @@ export function StepCheck() {
         transition={bounce}
         className="absolute top-[6%] left-[32%] w-[36%]"
       >
-        <Print3D paper="paleblue" garment="hoodie-blue" className="aspect-[4/5]" sizes="150px" />
+        <Print3D backdrop="oak" garment="hoodie-blue" className="aspect-[4/5]" sizes="150px" />
       </motion.div>
       <motion.span
         initial={{ scale: 0.3, opacity: 0 }}
