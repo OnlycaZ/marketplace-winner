@@ -63,6 +63,9 @@ Doar drumul de la un capăt la altul, în același proiect Next.js:
 3. Verifici fiecare rezultat: aprobi sau refaci.
 4. Descarci pozele aprobate, în format pătrat sau portret.
 
+Pe site apar deja Placement, Replacement, stilul salvat al magazinului și imaginea cu măsurători. Trebuie
+decis care dintre ele intră în prima versiune și care vin după.
+
 **Gata când:** câțiva oameni de pe lista de așteptare procesează un lot real fără ajutorul nostru și
 postează pozele.
 

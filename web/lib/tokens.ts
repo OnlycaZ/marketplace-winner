@@ -77,6 +77,10 @@ export const duration = {
   float: 6000,
   swing: 700,
   stagger: 60,
+  placement: 2400,
+  replacement: 1500,
+  straighten: 900,
+  shopStagger: 70,
 } as const;
 
 export const ease = {
@@ -86,7 +90,7 @@ export const ease = {
 } as const;
 
 const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const bezier = (p: readonly number[]) => `cubic-bezier(${p.join(", ")})`;
+export const bezier = (p: readonly number[]) => `cubic-bezier(${p.join(", ")})`;
 
 // Custom properties use the `--t-` prefix; globals.css maps them to Tailwind names.
 export function tokensCss(): string {

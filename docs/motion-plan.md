@@ -76,3 +76,14 @@ These replace #2 (backdrop cycle) and extend #5. The earlier "Cut" list still ap
 - **Motion** for the spring in the stack card (#7) and for reading the reduced-motion setting in components.
 - The backdrop cycle pauses on its own when the scene is off screen or the tab is hidden (no hidden motion, no wasted battery).
 - Motion tokens live in the same tokens file as colours and are read by both CSS and Motion.
+
+## Added 2026-11-05
+
+| Element | Why it moves | Duration | Curve |
+| --- | --- | --- | --- |
+| Hero phone demo | Explains the product in one loop; the timeline is in `globals.css` | 8s loop, 2.5s hold | ease-in-out wipe, ease-out card |
+| Placement | Shows the item lifted and set down in a scene | 2.4s, once | ease-out lift, ease-in-out fall |
+| Replacement | Shows one product leaving and yours taking its spot | 1.5s, once | ease-in-out out, ease-out in |
+| Shop style | Shows a whole shop matching, tile by tile | 400ms per tile, 70ms stagger | ease-out |
+| Segmented switch | Says which option is on | 220ms | ease-out |
+| Cropped label | Shows the photo is levelled, nothing more | 900ms, once | ease-out |

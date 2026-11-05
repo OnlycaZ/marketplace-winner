@@ -39,11 +39,11 @@ function Slider() {
     <div ref={ref} className="relative mx-auto aspect-[5/6] w-full overflow-hidden max-lg:max-w-[520px] rounded-md bg-surface shadow-float select-none">
       {/* Each sticker lives inside its own side, so the line wipes it away with that side. */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <Image unoptimized src="/assets/3d/before.webp" alt="" fill sizes={SIZES} className="object-cover" />
+        <Image unoptimized src="/assets/3d/before.webp" alt="Before: blue jeans on a grey blanket." fill sizes={SIZES} className="object-cover" />
         <span className={`${sticker} left-4`}>Before</span>
       </div>
       <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
-        <Image unoptimized src="/assets/3d/wood.webp" alt="" fill sizes={SIZES} className="object-cover" />
+        <Image unoptimized src="/assets/3d/wood.webp" alt="After: the same jeans on a wooden floor beside a vase of lavender." fill sizes={SIZES} className="object-cover" />
         <span className={`${sticker} right-4`}>After</span>
       </div>
       {/* The garment is one file on top of both sides: it can't change as the line moves. */}

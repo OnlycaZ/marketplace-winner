@@ -113,8 +113,9 @@ input {
   /* Hero demo (docs/motion-plan.md). Everything shares one 8s timeline, so one
      data attribute pauses it all and the steps can't drift apart. */
   .demo {
-    --card-x: 30%;
+    --card-x: 33%;
   }
+  .demo-tag,
   .demo-after,
   .demo-bar,
   .demo-spark,
@@ -125,19 +126,21 @@ input {
     animation-timing-function: linear;
     animation-fill-mode: both;
   }
+  .demo-tag {
+    animation-name: demo-tag;
+  }
   .demo-after {
     animation-name: demo-after;
   }
   .demo-bar {
     animation-name: demo-bar;
     filter: blur(2px);
-    mix-blend-mode: screen;
     background: linear-gradient(
       90deg,
       transparent,
-      color-mix(in srgb, var(--t-color-bg) 70%, transparent) 45%,
+      color-mix(in srgb, var(--t-color-sky) 85%, transparent) 42%,
       var(--t-color-bg) 50%,
-      color-mix(in srgb, var(--t-color-bg) 70%, transparent) 55%,
+      color-mix(in srgb, var(--t-color-sky) 85%, transparent) 58%,
       transparent
     );
   }
@@ -145,6 +148,7 @@ input {
     animation-name: demo-spark;
     background: var(--t-color-bg);
     clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    filter: drop-shadow(0 0 5px var(--t-color-sky));
   }
   .demo-card {
     animation-name: demo-card;
@@ -155,11 +159,7 @@ input {
   .float {
     animation: float var(--t-dur-float) var(--ease-in-out) infinite alternate;
   }
-  .sway {
-    transform-origin: 50% 0;
-    animation: sway var(--t-dur-float) var(--ease-in-out) infinite alternate;
-  }
-  .demo[data-running="false"] :is(.demo-after, .demo-bar, .demo-spark, .demo-card, .demo-badge, .float, .sway) {
+  .demo[data-running="false"] :is(.demo-tag, .demo-after, .demo-bar, .demo-spark, .demo-card, .demo-badge, .float) {
     animation-play-state: paused;
   }
 
@@ -180,7 +180,26 @@ input {
 
 @media (min-width: 640px) {
   .demo {
-    --card-x: 32%;
+    --card-x: 42%;
+  }
+}
+
+/* 8s loop: photo 0-16%, wipe 16-30%, card 34-44%, tick 44-51%, hold 2.5s to 83%, fade to 91%. */
+@keyframes demo-tag {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    animation-timing-function: var(--ease-out);
+  }
+  4%,
+  15% {
+    opacity: 1;
+    transform: none;
+  }
+  19%,
+  100% {
+    opacity: 0;
+    transform: none;
   }
 }
 
@@ -192,10 +211,11 @@ input {
     animation-timing-function: var(--ease-in-out);
   }
   30%,
-  92% {
+  83% {
     clip-path: inset(0 0 0 0);
     opacity: 1;
   }
+  91%,
   100% {
     clip-path: inset(0 0 0 0);
     opacity: 0;
@@ -249,10 +269,11 @@ input {
     transform: translateX(calc(-50% + var(--card-x) * 2.6)) translateY(-14px) scale(1.06) rotate(8deg);
   }
   44%,
-  92% {
+  83% {
     opacity: 1;
     transform: translateX(calc(-50% + var(--card-x) * 2.4)) scale(1) rotate(6deg);
   }
+  91%,
   100% {
     opacity: 0;
     transform: translateX(calc(-50% + var(--card-x) * 2.4)) translateY(10px) scale(0.9) rotate(6deg);
@@ -277,15 +298,6 @@ input {
 @keyframes float {
   to {
     transform: translateY(-10px);
-  }
-}
-
-@keyframes sway {
-  from {
-    transform: rotate(-1.5deg);
-  }
-  to {
-    transform: rotate(1.5deg);
   }
 }
 
@@ -345,12 +357,12 @@ input {
   .demo-after,
   .demo-badge,
   .float,
-  .sway,
   .swing-once,
   .mascot-happy,
   .mascot-sad {
     animation: none;
   }
+  .demo-tag,
   .demo-bar,
   .demo-spark {
     animation: none;
@@ -364,6 +376,7 @@ input {
   *::before,
   *::after {
     transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
   }
 }
 

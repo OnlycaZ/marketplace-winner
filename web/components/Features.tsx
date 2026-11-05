@@ -3,13 +3,12 @@
 import { useState } from "react";
 import { BeforeAfterCard } from "./BeforeAfter";
 import { FeatureCard } from "./FeatureCard";
-import { ExportFormats } from "./illustrations/ExportFormats";
+import { Measurements } from "./Measurements";
+import { CroppedLabel } from "./illustrations/CroppedLabel";
 import { PhotoStack } from "./illustrations/PhotoStack";
 import { ReviewScreen } from "./illustrations/ReviewScreen";
 
-export function Features() {
-  const [stackHover, setStackHover] = useState(false);
-
+export function Compare() {
   return (
     <section id="features" aria-labelledby="features-title" className="mx-auto mt-32 max-w-[1240px] px-4 sm:mt-40">
       <h2
@@ -18,8 +17,19 @@ export function Features() {
       >
         The garment stays. The background changes.
       </h2>
-      <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:gap-5">
+      <div className="mt-12 grid lg:grid-cols-12">
         <BeforeAfterCard />
+      </div>
+    </section>
+  );
+}
+
+export function FeatureCards() {
+  const [stackHover, setStackHover] = useState(false);
+
+  return (
+    <section aria-label="More features" className="mx-auto mt-32 max-w-[1240px] px-4 sm:mt-40">
+      <div className="grid gap-4 lg:grid-cols-12 lg:gap-5">
         <FeatureCard
           tone="surface"
           className="lg:col-span-7"
@@ -40,13 +50,22 @@ export function Features() {
           <ReviewScreen />
         </FeatureCard>
         <FeatureCard
-          tone="ink"
-          split
-          className="lg:col-span-12"
-          title="Ready for any marketplace"
-          text="Download each photo square or portrait, sized for the listing."
+          tone="paper"
+          className="lg:col-span-8"
+          title="Measurements"
+          text="Add measurements once. We turn them into a clean image buyers can read at a glance."
+          bleed={false}
         >
-          <ExportFormats />
+          <Measurements />
+        </FeatureCard>
+        <FeatureCard
+          tone="surface"
+          className="lg:col-span-4"
+          title="Labels & flaws stay as they are"
+          text="Label, detail and flaw photos are cropped and straightened, not restyled."
+          bleed={false}
+        >
+          <CroppedLabel />
         </FeatureCard>
       </div>
     </section>

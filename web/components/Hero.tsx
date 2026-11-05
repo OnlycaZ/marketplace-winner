@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, MotionConfig, useScroll, useTransform } from "motion/react";
 import { ButtonLink } from "./Button";
+import { HeroDemo } from "./HeroDemo";
 
 export function Hero() {
   // The clouds sink slightly slower than the page, which gives the sky some depth.
@@ -13,7 +14,7 @@ export function Hero() {
     <MotionConfig reducedMotion="user">
       <section
         aria-labelledby="hero-title"
-        className="relative flex min-h-[max(100svh,760px)] flex-col items-center overflow-hidden bg-sky px-4 pt-32 text-center text-bg sm:pt-[17vh]"
+        className="relative flex min-h-[max(100svh,760px)] flex-col items-center overflow-hidden bg-sky px-4 pt-28 pb-10 text-center text-bg"
       >
         {/* Bottom-aligned and never narrower than 520px, so phones still see the clothes on both sides.
             The image's top edge is the same blue as the section, so the join can't be seen. */}
@@ -24,7 +25,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_36%_40%_at_50%_32%,color-mix(in_srgb,var(--t-color-primary)_66%,transparent)_70%,transparent)] max-sm:bg-[radial-gradient(ellipse_80%_40%_at_50%_34%,color-mix(in_srgb,var(--t-color-primary)_66%,transparent)_70%,transparent)]" />
         <div className="absolute inset-x-0 bottom-0 h-12 bg-[linear-gradient(to_bottom,transparent,var(--t-color-bg))] sm:h-32" />
 
-        <div className="relative">
+        <div className="relative w-full">
           <h1
             id="hero-title"
             className="font-display-tight mx-auto text-display leading-display tracking-display text-balance"
@@ -50,6 +51,9 @@ export function Hero() {
             <ButtonLink href="#how-it-works" variant="outlineLight">
               See how it works
             </ButtonLink>
+          </div>
+          <div className="enter" style={{ "--i": 4 } as React.CSSProperties}>
+            <HeroDemo />
           </div>
         </div>
       </section>
